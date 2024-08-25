@@ -1,0 +1,5 @@
+build/
+*.swp
+docs/html
+docs/latex
+_downstream
