@@ -21,16 +21,17 @@ namespace subpar {
 /**
  * @brief Parallelize a range of tasks across multiple workers (i.e., workers).
  *
- * The aim is to split tasks in `[0, num_tasks)` into intervals that are executed by different workers.
- * By default, we create `num_threads` evenly-sized intervals that are distributed via OpenMP (if available) or `<thread>` (otherwise).
- * This is done using OpenMP if available, otherwise `<worker>` is used.
- *
- * Advanced users can substitute in their own parallelization scheme by defining a `SUBPAR_CUSTOM_PARALLEL` function-like macro.
- * This should accept the same arguments as `parallelize()` and will be used instead of OpenMP/`<thread>` whenever `parallelize()` is called.
- * Macro authors should note the expectations on `run_task_range()`.
- *
+ * The aim is to split tasks in `[0, num_tasks)` into non-overlapping contiguous intervals that are executed by different workers.
+ * In the default parallelization scheme, we create `num_workers` evenly-sized intervals that are executed via OpenMP (if available) or `<thread>` (otherwise).
+ * Not all workers may be used, e.g., if `num_tasks < num_workers`.
+ * 
+ * The `SUBPAR_USES_OPENMP` macro will be set to 1 iff OpenMP was used in the default scheme.
  * Users can define the `SUBPAR_NO_OPENMP` macro to force `parallelize()` to use `<thread>` even if OpenMP is available.
  * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
+ *
+ * Advanced users can substitute in their own parallelization scheme by defining `SUBPAR_CUSTOM_PARALLEL` before including the **subpar** header.
+ * This should be a function-like macro accept the same arguments as `parallelize()` and will be used instead of the default scheme whenever `parallelize()` is called.
+ * Macro authors should note the expectations on `run_task_range()`.
  *
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts three arguments:
@@ -83,6 +84,7 @@ void parallelize(int num_workers, Task_ num_tasks, Run_ run_task_range) {
     std::vector<std::exception_ptr> errors(num_workers);
 
 #if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP)
+#define SUBPAR_USES_OPENMP 1
     // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
     // so we need to do a loop here to ensure that each task range is executed.
     #pragma omp parallel for num_threads(num_workers)

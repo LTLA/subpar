@@ -51,6 +51,20 @@ static void check_ranges(const std::vector<std::pair<int, int> >& ranges, int nu
     EXPECT_EQ(last, num_tasks);
 }
 
+TEST(Parallelize, UsesOmp) {
+#ifdef SUBPAR_USES_OPENMP
+    bool uses_openmp = SUBPAR_USES_OPENMP;
+#else
+    bool uses_openmp = false;
+#endif
+
+#if defined(SUBPAR_CUSTOM_PARALLEL) || !defined(_OPENMP)
+    EXPECT_FALSE(uses_openmp);
+#else
+    EXPECT_TRUE(uses_openmp);
+#endif
+}
+
 TEST(Parallelize, ExactPartition) {
     std::vector<int> thread_counts { 2, 4, 5, 10 };
 
