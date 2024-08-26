@@ -19,7 +19,7 @@
 namespace subpar {
 
 /**
- * @brief Parallelize a range of tasks across multiple workers (i.e., workers).
+ * @brief Parallelize a range of tasks across multiple workers (typically threads).
  *
  * The aim is to split tasks in `[0, num_tasks)` into non-overlapping contiguous intervals that are executed by different workers.
  * In the default parallelization scheme, we create `num_workers` evenly-sized intervals that are executed via OpenMP (if available) or `<thread>` (otherwise).
