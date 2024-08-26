@@ -22,16 +22,12 @@ and another function that iterates over the range of tasks and executes them in 
 #include "subpar/subpar.hpp"
 
 subpar::parallelize(
-    /* num_threads = */ 10,
+    /* num_workers = */ 10,
     /* num_tasks = */ 12345,
-    /* setup = */ [&]() -> std::vector<double> {
-        // Pretending that we need a buffer for intermediate results.
-        return std::vector<double>(buffer_size);
-    },
-    /* run = */ [&](int thread, int start, int len, std::vector<double>& workspace) {
-        // ... do something in each thread...
+    /* run = */ [&](int worker, int start, int len) {
+        // ... do some per-worker set-up ...
         for (int task = start, end = start + len; task < end; ++task) {
-            // ...process each task...
+            // ...process each task ...
         }
     }
 );

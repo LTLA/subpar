@@ -5,13 +5,12 @@
 #include <vector>
 
 #ifdef CUSTOM_PARALLEL_TEST
-template<typename Task_, typename Setup_, typename Run_>
-void stupid_parallel(int num_threads, Task_ num_tasks, Setup_ setup, Run_ run) {
+template<typename Task_, typename Run_>
+void stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
     if (num_threads == 0) {
         return;
     }
 
-    auto wrk = setup();
     std::vector<Task_> allocations(num_threads);
     for (Task_ t = 0; t < num_tasks; ++t) {
         ++(allocations[t % num_threads]);
@@ -20,7 +19,7 @@ void stupid_parallel(int num_threads, Task_ num_tasks, Setup_ setup, Run_ run) {
     Task_ start = 0; 
     for (int t = 0; t < num_threads; ++t) {
         if (allocations[t]) {
-            run(t, start, allocations[t], wrk);
+            run(t, start, allocations[t]);
             start += allocations[t];
         }
     }
@@ -58,18 +57,11 @@ TEST(Parallelize, ExactPartition) {
     for (auto tn : thread_counts) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
-        subpar::parallelize(
-            ranges.size(),
-            assignments.size(),
-            [&]() -> bool {
-                return true;
-            }, 
-            [&](int t, int start, int len, bool&) {
-                ranges[t].first = start;
-                ranges[t].second = len;
-                std::fill_n(assignments.begin() + start, len, t);
-            }
-        );
+        subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+            ranges[t].first = start;
+            ranges[t].second = len;
+            std::fill_n(assignments.begin() + start, len, t);
+        });
 
         auto tabled = tabulate(assignments);
         std::vector<int> exact(tn, assignments.size() / tn);
@@ -84,18 +76,11 @@ TEST(Parallelize, InexactPartition) {
     for (auto tn : thread_counts) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
-        subpar::parallelize(
-            tn,
-            assignments.size(),
-            [&]() -> bool {
-                return true;
-            }, 
-            [&](int t, int start, int len, bool&) {
-                ranges[t].first = start;
-                ranges[t].second = len;
-                std::fill_n(assignments.begin() + start, len, t);
-            }
-        );
+        subpar::parallelize(tn, assignments.size(), [&](int t, int start, int len) {
+            ranges[t].first = start;
+            ranges[t].second = len;
+            std::fill_n(assignments.begin() + start, len, t);
+        });
 
         auto tabled = tabulate(assignments);
         EXPECT_EQ(tabled.size(), tn);
@@ -109,18 +94,11 @@ TEST(Parallelize, InexactPartition) {
 TEST(Parallelize, Overprovision) {
     std::vector<int> assignments(5, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(7);
-    subpar::parallelize(
-        ranges.size(),
-        assignments.size(),
-        [&]() -> bool {
-            return true;
-        }, 
-        [&](int t, int start, int len, bool&) {
-            ranges[t].first = start;
-            ranges[t].second = len;
-            std::fill_n(assignments.begin() + start, len, t);
-        }
-    );
+    subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+        ranges[t].first = start;
+        ranges[t].second = len;
+        std::fill_n(assignments.begin() + start, len, t);
+    });
 
     auto tabled = tabulate(assignments);
     std::vector<int> expected(assignments.size(), 1);
@@ -136,18 +114,11 @@ TEST(Parallelize, Overprovision) {
 TEST(Parallelize, OneThread) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(1);
-    subpar::parallelize(
-        ranges.size(),
-        assignments.size(),
-        [&]() -> bool {
-            return true;
-        }, 
-        [&](int t, int start, int len, bool&) {
-            ranges[t].first = start;
-            ranges[t].second = len;
-            std::fill_n(assignments.begin() + start, len, t);
-        }
-    );
+    subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+        ranges[t].first = start;
+        ranges[t].second = len;
+        std::fill_n(assignments.begin() + start, len, t);
+    });
 
     auto tabled = tabulate(assignments);
     EXPECT_EQ(tabled.size(), 1);
@@ -157,53 +128,33 @@ TEST(Parallelize, OneThread) {
 
 TEST(Parallelize, OneTask) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize(
-        10,
-        1,
-        [&]() -> bool {
-            return true;
-        }, 
-        [&](int t, int start, int len, bool&) {
-            std::fill_n(assignments.begin() + start, len, t);
-        }
-    );
+    subpar::parallelize(/* nthreads = */ 10, /* ntask = */ 1, [&](int t, int start, int len) {
+        std::fill_n(assignments.begin() + start, len, t);
+    });
 
     EXPECT_EQ(assignments.front(), 0);
 }
 
 TEST(Parallelize, NoTasks) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize(
-        10,
-        0,
-        [&]() -> bool {
-            return true;
-        }, 
-        [&](int t, int start, int len, bool&) {
-            std::fill_n(assignments.begin() + start, len, t);
-        }
-    );
+    subpar::parallelize(/* nthreads = */ 10, /* ntasks = */ 0, [&](int t, int start, int len) {
+        std::fill_n(assignments.begin() + start, len, t);
+    });
 
     EXPECT_EQ(assignments.front(), 255);
     EXPECT_EQ(assignments.back(), 255);
 }
 
 TEST(Parallelize, SmallIntegers) {
+    // This test checks that the range calculations do not overflow. 
     uint8_t njobs = -1;
     std::vector<int> assignments(njobs, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(10);
-    subpar::parallelize(
-        10,
-        njobs,
-        [&]() -> bool {
-            return true;
-        }, 
-        [&](int t, uint8_t start, uint8_t len, bool&) {
-            ranges[t].first = start;
-            ranges[t].second = len;
-            std::fill_n(assignments.begin() + start, len, t);
-        }
-    );
+    subpar::parallelize(/* nthreads = */ 10, njobs, [&](int t, uint8_t start, uint8_t len) {
+        ranges[t].first = start;
+        ranges[t].second = len;
+        std::fill_n(assignments.begin() + start, len, t);
+    });
 
     auto tabled = tabulate(assignments);
     EXPECT_EQ(tabled.size(), ranges.size());
@@ -216,16 +167,9 @@ TEST(Parallelize, SmallIntegers) {
 TEST(Parallelize, Errors) {
     EXPECT_ANY_THROW({
         try {
-            subpar::parallelize(
-                255,
-                2,
-                []() -> bool {
-                    return true;
-                },
-                [&](size_t, int, int, bool&) -> void {
-                    throw std::runtime_error("WHEE");
-                }
-            );
+            subpar::parallelize(255, 2, [&](size_t, int, int) -> void {
+                throw std::runtime_error("WHEE");
+            });
         } catch (std::exception& e) {
             EXPECT_TRUE(std::string(e.what()).find("WHEE") != std::string::npos);
             throw;
@@ -235,15 +179,8 @@ TEST(Parallelize, Errors) {
     });
 
     EXPECT_ANY_THROW({
-        subpar::parallelize(
-            255,
-            2,
-            []() -> bool {
-                throw 1;
-                return true; 
-            },
-            [&](size_t, int, int, bool&) -> void {
-            }
-        );
+        subpar::parallelize(255, 2, [&](size_t, int, int) -> void {
+            throw 1;
+        });
     });
 }
