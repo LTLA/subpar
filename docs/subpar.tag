@@ -13,8 +13,8 @@
       <type>void</type>
       <name>parallelize</name>
       <anchorfile>namespacesubpar.html</anchorfile>
-      <anchor>a72a5ce4d83235f852907282b5212c560</anchor>
-      <arglist>(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_ run_task_range)</arglist>
+      <anchor>a63f23d31089b98cd332e8a7508e35c15</anchor>
+      <arglist>(int num_workers, Task_ num_tasks, Run_ run_task_range)</arglist>
     </member>
   </compound>
   <compound kind="page">

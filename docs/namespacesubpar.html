@@ -82,20 +82,20 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a72a5ce4d83235f852907282b5212c560" id="r_a72a5ce4d83235f852907282b5212c560"><td class="memTemplParams" colspan="2">template&lt;typename Task_ , class Setup_ , class Run_ &gt; </td></tr>
-<tr class="memitem:a72a5ce4d83235f852907282b5212c560"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a72a5ce4d83235f852907282b5212c560">parallelize</a> (int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_ run_task_range)</td></tr>
-<tr class="separator:a72a5ce4d83235f852907282b5212c560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63f23d31089b98cd332e8a7508e35c15" id="r_a63f23d31089b98cd332e8a7508e35c15"><td class="memTemplParams" colspan="2">template&lt;typename Task_ , class Run_ &gt; </td></tr>
+<tr class="memitem:a63f23d31089b98cd332e8a7508e35c15"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a63f23d31089b98cd332e8a7508e35c15">parallelize</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
+<tr class="separator:a63f23d31089b98cd332e8a7508e35c15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Substitutable parallelization functions. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a72a5ce4d83235f852907282b5212c560" name="a72a5ce4d83235f852907282b5212c560"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72a5ce4d83235f852907282b5212c560">&#9670;&#160;</a></span>parallelize()</h2>
+<a id="a63f23d31089b98cd332e8a7508e35c15" name="a63f23d31089b98cd332e8a7508e35c15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63f23d31089b98cd332e8a7508e35c15">&#9670;&#160;</a></span>parallelize()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Task_ , class Setup_ , class Run_ &gt; </div>
+template&lt;typename Task_ , class Run_ &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void subpar::parallelize </td>
@@ -112,12 +112,6 @@ template&lt;typename Task_ , class Setup_ , class Run_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Setup_&#160;</td>
-          <td class="paramname"><em>per_worker_setup</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">Run_&#160;</td>
           <td class="paramname"><em>run_task_range</em>&#160;</td>
         </tr>
@@ -129,16 +123,14 @@ template&lt;typename Task_ , class Setup_ , class Run_ &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Parallelize a range of tasks across multiple workers (i.e., workers). The aim is to split tasks in <code>[0, num_tasks)</code> into intervals that are executed by different workers. By default, we create <code>num_threads</code> evenly-sized intervals that are distributed via OpenMP (if available) or <code>&lt;thread&gt;</code> (otherwise). This is done using OpenMP if available, otherwise <code>&lt;worker&gt;</code> is used.</p>
-<p>Advanced users can substitute in their own parallelization scheme by defining a <code>SUBPAR_CUSTOM_PARALLEL</code> function-like macro. This should accept the same arguments as <code><a class="el" href="namespacesubpar.html#a72a5ce4d83235f852907282b5212c560">parallelize()</a></code> and will be used instead of OpenMP/<code>&lt;thread&gt;</code> whenever <code><a class="el" href="namespacesubpar.html#a72a5ce4d83235f852907282b5212c560">parallelize()</a></code> is called. Macro authors should note the expectations on <code>per_worker_setup()</code> and <code>run_task_range()</code>.</p>
+<p>Advanced users can substitute in their own parallelization scheme by defining a <code>SUBPAR_CUSTOM_PARALLEL</code> function-like macro. This should accept the same arguments as <code><a class="el" href="namespacesubpar.html#a63f23d31089b98cd332e8a7508e35c15">parallelize()</a></code> and will be used instead of OpenMP/<code>&lt;thread&gt;</code> whenever <code><a class="el" href="namespacesubpar.html#a63f23d31089b98cd332e8a7508e35c15">parallelize()</a></code> is called. Macro authors should note the expectations on <code>run_task_range()</code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Task_</td><td>Integer type for the number of tasks. </td></tr>
-    <tr><td class="paramname">Setup_</td><td>Function that accepts no arguments and returns an arbitrary "workspace" object. </td></tr>
-    <tr><td class="paramname">Run_</td><td>Function that accepts four arguments:<ul>
+    <tr><td class="paramname">Run_</td><td>Function that accepts three arguments:<ul>
 <li><code>w</code>, the worker number executing this task range. This will be passed as an <code>int</code>.</li>
 <li><code>start</code>, the start index of the task range. This will be passed as a <code>Task_</code>.</li>
 <li><code>length</code>, the number of tasks in the task range. This will be passed as a <code>Task_</code>.</li>
-<li><code>workspace</code>, an instance of the workspace object returned by the <code>Setup_</code> function.</li>
 </ul>
 Any return value is ignored.</td></tr>
   </table>
@@ -148,11 +140,9 @@ Any return value is ignored.</td></tr>
   <table class="params">
     <tr><td class="paramname">num_workers</td><td>Number of workers. This should be a positive integer. Any zero or negative values are treated as 1. </td></tr>
     <tr><td class="paramname">num_tasks</td><td>Number of tasks. This should be a non-negative integer. </td></tr>
-    <tr><td class="paramname">per_worker_setup</td><td>Function that creates a per-worker workspace object. This function may be zero, one or multiple times per worker. The same workspace object may be re-used across multiple <code>run_task_range()</code> calls within a worker. This function may throw an exception. </td></tr>
-    <tr><td class="paramname">run_task_range</td><td>Function to iterate over a range of tasks within a single worker. This may be called zero, one or multiple times for a single worker. In each call:<ul>
+    <tr><td class="paramname">run_task_range</td><td>Function to iterate over a range of tasks within a worker. This may be called zero, one or multiple times in any particular worker. In each call:<ul>
 <li><code>w</code> is guaranteed to be in <code>[0, num_workers)</code>.</li>
 <li><code>[start, start + length)</code> is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to <code>run_task_range()</code>.</li>
-<li><code>workspace</code> may have been used by a previous call to <code>run_task_range()</code> in the same worker.</li>
 </ul>
 This function may throw an exception. </td></tr>
   </table>
