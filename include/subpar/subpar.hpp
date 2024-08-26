@@ -88,23 +88,19 @@ void parallelize(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_
     std::vector<std::string> errors(num_workers);
 
 #ifdef _OPENMP
-    #pragma omp parallel num_threads(num_workers)
-    {
-        auto workspace = per_worker_setup();
-
-        // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
-        // so we need to do a loop here to ensure that each task range is executed.
-        #pragma omp for
-        for (int w = 0; w < num_workers; ++w) {
-            try { 
-                Task_ start = w * tasks_per_worker + (w < remainder ? t : remainder); // need to shift the start by the number of previous 't' that added a remainder.
-                Task_ length = tasks_per_worker + (w < remainder);
-                run_task_range(w, start, length, workspace);
-            } catch (std::exception& e) {
-                errors[w] = e.what();
-            } catch (...) {
-                errors[w] = "unknown error in worker " + std::to_string(w);
-            }
+    // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
+    // so we need to do a loop here to ensure that each task range is executed.
+    #pragma omp parallel for num_threads(num_workers)
+    for (int w = 0; w < num_workers; ++w) {
+        try { 
+            auto workspace = per_worker_setup();
+            Task_ start = w * tasks_per_worker + (w < remainder ? w : remainder); // need to shift the start by the number of previous 't' that added a remainder.
+            Task_ length = tasks_per_worker + (w < remainder);
+            run_task_range(w, start, length, workspace);
+        } catch (std::exception& e) {
+            errors[w] = e.what();
+        } catch (...) {
+            errors[w] = "unknown error in worker " + std::to_string(w);
         }
     }
 
