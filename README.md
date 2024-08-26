@@ -1,5 +1,9 @@
 # Substitutable parallelization for C++ libraries
 
+![Unit tests](https://github.com/LTLA/subpar/actions/workflows/run-tests.yaml/badge.svg)
+![Documentation](https://github.com/LTLA/subpar/actions/workflows/doxygenate.yaml/badge.svg)
+[![Codecov](https://codecov.io/gh/LTLA/subpar/branch/master/graph/badge.svg?token=GByG4StuqU)](https://codecov.io/gh/LTLA/subpar)
+
 ## Overview
 
 This repository implements a simple `parallelize()` function that can be used throughout all of my C++ libaries.
@@ -10,14 +14,14 @@ This allows applications to quickly substitute all instances of `parallelize()` 
 
 ## Quick start
 
-The `ltla::parallelize()` function requires the number of workers, the number of tasks,
+The `subpar::parallelize()` function requires the number of workers, the number of tasks,
 a function that sets up any worker-local variables,
 and another function that iterates over the range of tasks and executes them in a single worker.
 
 ```cpp
 #include "subpar/subpar.hpp"
 
-ltla::parallelize(
+subpar::parallelize(
     /* num_threads = */ 10,
     /* num_tasks = */ 12345,
     /* setup = */ [&]() -> std::vector<double> {
@@ -33,9 +37,9 @@ ltla::parallelize(
 );
 ```
 
-If the `SUBPAR_CUSTOM_PARALLEL` function-like macro is defined, it is used in place of the default behavior whenever `ltla::parallelize()` is called.
-The macro should accept exactly the same arguments as `ltla::parallelize()`.
-Note that the macro author is responsible for handling exceptions and edge cases like `num_threads <= 0`.
+If the `SUBPAR_CUSTOM_PARALLEL` function-like macro is defined, it is used in place of the default behavior whenever `subpar::parallelize()` is called.
+The macro should accept exactly the same arguments as `subpar::parallelize()`, but the macro author is now responsible for distributing tasks among workers.
+This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc.
 
 Check out the [reference documentation](https://ltla.github.io/subpar) for more details.
 
