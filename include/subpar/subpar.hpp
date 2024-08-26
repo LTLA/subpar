@@ -5,7 +5,6 @@
 #include <vector>
 #include <stdexcept>
 #include <thread>
-#include <string>
 #endif
 
 /**
@@ -85,7 +84,7 @@ void parallelize(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_
         remainder = 0;
     }
 
-    std::vector<std::string> errors(num_workers);
+    std::vector<std::exception_ptr> errors(num_workers);
 
 #ifdef _OPENMP
     // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
@@ -97,10 +96,8 @@ void parallelize(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_
             Task_ start = w * tasks_per_worker + (w < remainder ? w : remainder); // need to shift the start by the number of previous 't' that added a remainder.
             Task_ length = tasks_per_worker + (w < remainder);
             run_task_range(w, start, length, workspace);
-        } catch (std::exception& e) {
-            errors[w] = e.what();
         } catch (...) {
-            errors[w] = "unknown error in worker " + std::to_string(w);
+            errors[w] = std::current_exception();
         }
     }
 
@@ -115,10 +112,8 @@ void parallelize(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_
             try {
                 auto workspace = per_worker_setup();
                 run_task_range(w, start, length, workspace);
-            } catch (std::exception& e) {
-                errors[w] = e.what();
             } catch (...) {
-                errors[w] = "unknown error in worker " + std::to_string(w);
+                errors[w] = std::current_exception();
             }
         }, w, start, length);
         start += length;
@@ -130,8 +125,8 @@ void parallelize(int num_workers, Task_ num_tasks, Setup_ per_worker_setup, Run_
 #endif
 
     for (const auto& e : errors) {
-        if (!e.empty()) {
-            throw std::runtime_error(e);
+        if (e) {
+            std::rethrow_exception(e);
         }
     }
 #endif

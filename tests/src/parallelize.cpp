@@ -229,24 +229,21 @@ TEST(Parallelize, Errors) {
         } catch (std::exception& e) {
             EXPECT_TRUE(std::string(e.what()).find("WHEE") != std::string::npos);
             throw;
+        } catch (...) {
+            // don't do anything, it shouldn't get here.
         }
     });
 
     EXPECT_ANY_THROW({
-        try {
-            subpar::parallelize(
-                255,
-                2,
-                []() -> bool {
-                    throw 1;
-                    return true; 
-                },
-                [&](size_t, int, int, bool&) -> void {
-                }
-            );
-        } catch (std::exception& e) {
-            EXPECT_TRUE(std::string(e.what()).find("unknown error") != std::string::npos);
-            throw;
-        }
+        subpar::parallelize(
+            255,
+            2,
+            []() -> bool {
+                throw 1;
+                return true; 
+            },
+            [&](size_t, int, int, bool&) -> void {
+            }
+        );
     });
 }
