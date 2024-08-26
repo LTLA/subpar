@@ -19,7 +19,8 @@
 namespace subpar {
 
 /**
- * Parallelize a range of tasks across multiple workers (i.e., workers).
+ * @brief Parallelize a range of tasks across multiple workers (i.e., workers).
+ *
  * The aim is to split tasks in `[0, num_tasks)` into intervals that are executed by different workers.
  * By default, we create `num_threads` evenly-sized intervals that are distributed via OpenMP (if available) or `<thread>` (otherwise).
  * This is done using OpenMP if available, otherwise `<worker>` is used.
@@ -27,6 +28,9 @@ namespace subpar {
  * Advanced users can substitute in their own parallelization scheme by defining a `SUBPAR_CUSTOM_PARALLEL` function-like macro.
  * This should accept the same arguments as `parallelize()` and will be used instead of OpenMP/`<thread>` whenever `parallelize()` is called.
  * Macro authors should note the expectations on `run_task_range()`.
+ *
+ * Users can define the `SUBPAR_NO_OPENMP` macro to force `parallelize()` to use `<thread>` even if OpenMP is available.
+ * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
  *
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts three arguments:
@@ -78,7 +82,7 @@ void parallelize(int num_workers, Task_ num_tasks, Run_ run_task_range) {
 
     std::vector<std::exception_ptr> errors(num_workers);
 
-#ifdef _OPENMP
+#if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP)
     // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
     // so we need to do a loop here to ensure that each task range is executed.
     #pragma omp parallel for num_threads(num_workers)
