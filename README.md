@@ -15,8 +15,7 @@ This allows applications to quickly substitute all instances of `parallelize()` 
 ## Quick start
 
 The `subpar::parallelize()` function requires the number of workers, the number of tasks,
-a function that sets up any worker-local variables,
-and another function that iterates over the range of tasks and executes them in a single worker.
+and a function that iterates over the range of tasks and executes them in a single worker.
 
 ```cpp
 #include "subpar/subpar.hpp"
