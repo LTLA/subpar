@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['tt_20fetchcontent_20tt_0',['CMake with &lt;tt&gt;FetchContent&lt;/tt&gt;',['../index.html#autotoc_md4',1,'']]],
-  ['tt_20find_5fpackage_20tt_1',['CMake with &lt;tt&gt;find_package()&lt;/tt&gt;',['../index.html#autotoc_md5',1,'']]]
+  ['start_0',['Quick start',['../index.html#autotoc_md2',1,'']]],
+  ['subpar_1',['subpar',['../namespacesubpar.html',1,'']]],
+  ['subpar_2ehpp_2',['subpar.hpp',['../subpar_8hpp.html',1,'']]],
+  ['substitutable_20parallelization_20for_20c_20libraries_3',['Substitutable parallelization for C++ libraries',['../index.html',1,'']]]
 ];

@@ -82,16 +82,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8b04719f4382e932e657464cfb9ffca2" id="r_a8b04719f4382e932e657464cfb9ffca2"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
-<tr class="memitem:a8b04719f4382e932e657464cfb9ffca2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a8b04719f4382e932e657464cfb9ffca2">parallelize</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
-<tr class="memdesc:a8b04719f4382e932e657464cfb9ffca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers (typically threads).  <br /></td></tr>
-<tr class="separator:a8b04719f4382e932e657464cfb9ffca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe" id="r_a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
+<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">parallelize_range</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
+<tr class="memdesc:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers (typically threads).  <br /></td></tr>
+<tr class="separator:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Substitutable parallelization functions. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a8b04719f4382e932e657464cfb9ffca2" name="a8b04719f4382e932e657464cfb9ffca2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b04719f4382e932e657464cfb9ffca2">&#9670;&#160;</a></span>parallelize()</h2>
+<a id="a9c64cc17f4f8d1fadbba6d25053a8dbe" name="a9c64cc17f4f8d1fadbba6d25053a8dbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c64cc17f4f8d1fadbba6d25053a8dbe">&#9670;&#160;</a></span>parallelize_range()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -99,7 +99,7 @@ Functions</h2></td></tr>
 template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void subpar::parallelize </td>
+          <td class="memname">void subpar::parallelize_range </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>num_workers</em>, </td>
@@ -126,9 +126,9 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
 
 <p>Parallelize a range of tasks across multiple workers (typically threads). </p>
 <p>The aim is to split tasks in <code>[0, num_tasks)</code> into non-overlapping contiguous intervals that are executed by different workers. In the default parallelization scheme, we create <code>num_workers</code> evenly-sized intervals that are executed via OpenMP (if available) or <code>&lt;thread&gt;</code> (otherwise). Not all workers may be used, e.g., if <code>num_tasks &lt; num_workers</code>.</p>
-<p>The <code>SUBPAR_USES_OPENMP</code> macro will be set to 1 iff OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP</code> macro to force <code><a class="el" href="namespacesubpar.html#a8b04719f4382e932e657464cfb9ffca2" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
-<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLEL</code> before including the <b>subpar</b> header. This should be a function-like macro accept the same arguments as <code><a class="el" href="namespacesubpar.html#a8b04719f4382e932e657464cfb9ffca2" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> and will be used instead of the default scheme whenever <code><a class="el" href="namespacesubpar.html#a8b04719f4382e932e657464cfb9ffca2" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> is called. Macro authors should note the expectations on <code>run_task_range()</code>.</p>
-<p>If <code>nothrow_ = true</code>, exception handling is omitted from the default parallelization scheme. This avoids some unnecessary work when the caller knows that <code>run_task_range()</code> will never throw. For custom schemes, if <code>SUBPAR_CUSTOM_PARALLEL_NOTHROW</code> is defined, it will be used if <code>nothrow_ = true</code>; otherwise, <code>SUBPAR_CUSTOM_PARALLEL</code> will continue to be used.</p>
+<p>The <code>SUBPAR_USES_OPENMP</code> macro will be set to 1 iff OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP</code> macro to force <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
+<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> before including the <b>subpar</b> header. This should be a function-like macro accept the same arguments as <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> and will be used instead of the default scheme whenever <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">parallelize()</a></code> is called. Macro authors should note the expectations on <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">run_task_range()</a></code>.</p>
+<p>If <code>nothrow_ = true</code>, exception handling is omitted from the default parallelization scheme. This avoids some unnecessary work when the caller knows that <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">run_task_range()</a></code> will never throw. For custom schemes, if <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> is defined, it will be used if <code>nothrow_ = true</code>; otherwise, <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> will continue to be used.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">nothrow_</td><td>Whether the <code>Run_</code> function cannot throw an exception. </td></tr>
@@ -148,7 +148,7 @@ Any return value is ignored.</td></tr>
     <tr><td class="paramname">num_tasks</td><td>Number of tasks. This should be a non-negative integer. </td></tr>
     <tr><td class="paramname">run_task_range</td><td>Function to iterate over a range of tasks within a worker. This may be called zero, one or multiple times in any particular worker. In each call:<ul>
 <li><code>w</code> is guaranteed to be in <code>[0, num_workers)</code>.</li>
-<li><code>[start, start + length)</code> is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to <code>run_task_range()</code>.</li>
+<li><code>[start, start + length)</code> is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers (typically threads).">run_task_range()</a></code>.</li>
 </ul>
 This function may throw an exception. </td></tr>
   </table>
