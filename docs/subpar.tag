@@ -7,15 +7,29 @@
     <namespace>subpar</namespace>
   </compound>
   <compound kind="file">
+    <name>simple.hpp</name>
+    <path>subpar/</path>
+    <filename>simple_8hpp.html</filename>
+    <namespace>subpar</namespace>
+  </compound>
+  <compound kind="file">
     <name>subpar.hpp</name>
     <path>subpar/</path>
     <filename>subpar_8hpp.html</filename>
     <includes id="range_8hpp" name="range.hpp" local="yes" import="no" module="no" objc="no">range.hpp</includes>
+    <includes id="simple_8hpp" name="simple.hpp" local="yes" import="no" module="no" objc="no">simple.hpp</includes>
     <namespace>subpar</namespace>
   </compound>
   <compound kind="namespace">
     <name>subpar</name>
     <filename>namespacesubpar.html</filename>
+    <member kind="function">
+      <type>void</type>
+      <name>parallelize_simple</name>
+      <anchorfile>namespacesubpar.html</anchorfile>
+      <anchor>abd9eeb2cbaaf14382b926674c47b9d73</anchor>
+      <arglist>(Task_ num_tasks, Run_ run_task)</arglist>
+    </member>
     <member kind="function">
       <type>void</type>
       <name>parallelize_range</name>

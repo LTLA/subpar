@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>subpar: subpar/subpar.hpp File Reference</title>
+<title>subpar: subpar/simple.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -76,26 +76,37 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">subpar.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">simple.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Substitutable parallelization functions.  
+<p>Parallelize individual tasks across workers.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="range_8hpp_source.html">range.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="simple_8hpp_source.html">simple.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;thread&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &quot;defs.hpp&quot;</code><br />
 </div>
-<p><a href="subpar_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="simple_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacesubpar" id="r_namespacesubpar"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesubpar.html">subpar</a></td></tr>
 <tr class="memdesc:namespacesubpar"><td class="mdescLeft">&#160;</td><td class="mdescRight">Substitutable parallelization functions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:abd9eeb2cbaaf14382b926674c47b9d73" id="r_abd9eeb2cbaaf14382b926674c47b9d73"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">bool</a> nothrow_ = false, <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">typename</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Task_</a> , <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">class</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Run_</a> &gt; </td></tr>
+<tr class="memitem:abd9eeb2cbaaf14382b926674c47b9d73"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73">subpar::parallelize_simple</a> (<a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Task_</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">num_tasks</a>, <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Run_</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">run_task</a>)</td></tr>
+<tr class="memdesc:abd9eeb2cbaaf14382b926674c47b9d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize individual tasks across workers.  <br /></td></tr>
+<tr class="separator:abd9eeb2cbaaf14382b926674c47b9d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Substitutable parallelization functions. </p>
+<div class="textblock"><p>Parallelize individual tasks across workers. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
