@@ -26,6 +26,9 @@ void stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
 }
 
 #define SUBPAR_CUSTOM_PARALLEL stupid_parallel
+#ifdef CUSTOM_PARALLEL_TEST_NOTHROW
+#define SUBPAR_CUSTOM_PARALLEL_NOTHROW stupid_parallel
+#endif
 #endif
 
 #include "subpar/subpar.hpp"
@@ -197,4 +200,21 @@ TEST(Parallelize, Errors) {
             throw 1;
         });
     });
+}
+
+TEST(Parallelize, Nothrow) {
+    std::vector<int> assignments(1000, /* dummy value */ 255);
+    int tn = 5;
+
+    std::vector<std::pair<int, int> > ranges(tn);
+    subpar::parallelize<true>(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+        ranges[t].first = start;
+        ranges[t].second = len;
+        std::fill_n(assignments.begin() + start, len, t);
+    });
+
+    auto tabled = tabulate(assignments);
+    std::vector<int> exact(tn, assignments.size() / tn);
+    EXPECT_EQ(tabled, exact);
+    check_ranges(ranges, assignments.size());
 }

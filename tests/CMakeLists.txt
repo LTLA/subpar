@@ -49,6 +49,9 @@ create_executable(libtest)
 create_executable(custest)
 target_compile_definitions(custest PRIVATE CUSTOM_PARALLEL_TEST=1)
 
+create_executable(cusnothrowtest)
+target_compile_definitions(cusnothrowtest PRIVATE CUSTOM_PARALLEL_TEST=1 CUSTOM_PARALLEL_TEST_NOTHROW=1)
+
 find_package(OpenMP)
 if(OpenMP_FOUND)
     create_executable(omptest)
