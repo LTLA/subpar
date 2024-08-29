@@ -26,6 +26,7 @@ macro(create_executable target)
     add_executable(
         ${target}
         src/range.cpp
+        src/simple.cpp
     )
 
     target_link_libraries(
