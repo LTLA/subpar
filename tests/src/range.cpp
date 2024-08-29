@@ -25,9 +25,9 @@ void stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
     }
 }
 
-#define SUBPAR_CUSTOM_PARALLEL stupid_parallel
+#define SUBPAR_CUSTOM_PARALLELIZE_RANGE stupid_parallel
 #ifdef CUSTOM_PARALLEL_TEST_NOTHROW
-#define SUBPAR_CUSTOM_PARALLEL_NOTHROW stupid_parallel
+#define SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW stupid_parallel
 #endif
 #endif
 
@@ -54,7 +54,7 @@ static void check_ranges(const std::vector<std::pair<int, int> >& ranges, int nu
     EXPECT_EQ(last, num_tasks);
 }
 
-TEST(Parallelize, UsesOmp) {
+TEST(ParallelizeRange, UsesOmp) {
 #ifdef SUBPAR_USES_OPENMP
     bool uses_openmp = SUBPAR_USES_OPENMP;
 #else
@@ -68,13 +68,13 @@ TEST(Parallelize, UsesOmp) {
 #endif
 }
 
-TEST(Parallelize, ExactPartition) {
+TEST(ParallelizeRange, ExactPartition) {
     std::vector<int> thread_counts { 2, 4, 5, 10 };
 
     for (auto tn : thread_counts) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
-        subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+        subpar::parallelize_range(ranges.size(), assignments.size(), [&](int t, int start, int len) {
             ranges[t].first = start;
             ranges[t].second = len;
             std::fill_n(assignments.begin() + start, len, t);
@@ -87,13 +87,13 @@ TEST(Parallelize, ExactPartition) {
     }
 }
 
-TEST(Parallelize, InexactPartition) {
+TEST(ParallelizeRange, InexactPartition) {
     std::vector<int> thread_counts { 3, 6, 7, 9, 11 };
 
     for (auto tn : thread_counts) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
-        subpar::parallelize(tn, assignments.size(), [&](int t, int start, int len) {
+        subpar::parallelize_range(tn, assignments.size(), [&](int t, int start, int len) {
             ranges[t].first = start;
             ranges[t].second = len;
             std::fill_n(assignments.begin() + start, len, t);
@@ -108,10 +108,10 @@ TEST(Parallelize, InexactPartition) {
     }
 }
 
-TEST(Parallelize, Overprovision) {
+TEST(ParallelizeRange, Overprovision) {
     std::vector<int> assignments(5, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(7);
-    subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+    subpar::parallelize_range(ranges.size(), assignments.size(), [&](int t, int start, int len) {
         ranges[t].first = start;
         ranges[t].second = len;
         std::fill_n(assignments.begin() + start, len, t);
@@ -128,10 +128,10 @@ TEST(Parallelize, Overprovision) {
     check_ranges(ranges, assignments.size());
 }
 
-TEST(Parallelize, OneThread) {
+TEST(ParallelizeRange, OneThread) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(1);
-    subpar::parallelize(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+    subpar::parallelize_range(ranges.size(), assignments.size(), [&](int t, int start, int len) {
         ranges[t].first = start;
         ranges[t].second = len;
         std::fill_n(assignments.begin() + start, len, t);
@@ -143,18 +143,18 @@ TEST(Parallelize, OneThread) {
     check_ranges(ranges, assignments.size());
 }
 
-TEST(Parallelize, OneTask) {
+TEST(ParallelizeRange, OneTask) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize(/* nthreads = */ 10, /* ntask = */ 1, [&](int t, int start, int len) {
+    subpar::parallelize_range(/* nthreads = */ 10, /* ntask = */ 1, [&](int t, int start, int len) {
         std::fill_n(assignments.begin() + start, len, t);
     });
 
     EXPECT_EQ(assignments.front(), 0);
 }
 
-TEST(Parallelize, NoTasks) {
+TEST(ParallelizeRange, NoTasks) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize(/* nthreads = */ 10, /* ntasks = */ 0, [&](int t, int start, int len) {
+    subpar::parallelize_range(/* nthreads = */ 10, /* ntasks = */ 0, [&](int t, int start, int len) {
         std::fill_n(assignments.begin() + start, len, t);
     });
 
@@ -162,12 +162,12 @@ TEST(Parallelize, NoTasks) {
     EXPECT_EQ(assignments.back(), 255);
 }
 
-TEST(Parallelize, SmallIntegers) {
+TEST(ParallelizeRange, SmallIntegers) {
     // This test checks that the range calculations do not overflow. 
     uint8_t njobs = -1;
     std::vector<int> assignments(njobs, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(10);
-    subpar::parallelize(/* nthreads = */ 10, njobs, [&](int t, uint8_t start, uint8_t len) {
+    subpar::parallelize_range(/* nthreads = */ 10, njobs, [&](int t, uint8_t start, uint8_t len) {
         ranges[t].first = start;
         ranges[t].second = len;
         std::fill_n(assignments.begin() + start, len, t);
@@ -181,10 +181,10 @@ TEST(Parallelize, SmallIntegers) {
     check_ranges(ranges, assignments.size());
 }
 
-TEST(Parallelize, Errors) {
+TEST(ParallelizeRange, Errors) {
     EXPECT_ANY_THROW({
         try {
-            subpar::parallelize(255, 2, [&](size_t, int, int) -> void {
+            subpar::parallelize_range(255, 2, [&](size_t, int, int) -> void {
                 throw std::runtime_error("WHEE");
             });
         } catch (std::exception& e) {
@@ -196,18 +196,18 @@ TEST(Parallelize, Errors) {
     });
 
     EXPECT_ANY_THROW({
-        subpar::parallelize(255, 2, [&](size_t, int, int) -> void {
+        subpar::parallelize_range(255, 2, [&](size_t, int, int) -> void {
             throw 1;
         });
     });
 }
 
-TEST(Parallelize, Nothrow) {
+TEST(ParallelizeRange, Nothrow) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
     int tn = 5;
 
     std::vector<std::pair<int, int> > ranges(tn);
-    subpar::parallelize<true>(ranges.size(), assignments.size(), [&](int t, int start, int len) {
+    subpar::parallelize_range<true>(ranges.size(), assignments.size(), [&](int t, int start, int len) {
         ranges[t].first = start;
         ranges[t].second = len;
         std::fill_n(assignments.begin() + start, len, t);

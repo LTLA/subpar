@@ -25,7 +25,7 @@ endif()
 macro(create_executable target)
     add_executable(
         ${target}
-        src/parallelize.cpp
+        src/range.cpp
     )
 
     target_link_libraries(

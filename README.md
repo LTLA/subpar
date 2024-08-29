@@ -14,13 +14,13 @@ This allows applications to quickly substitute all instances of `parallelize()` 
 
 ## Quick start
 
-The `subpar::parallelize()` function requires the number of workers, the number of tasks,
+The `subpar::parallelize_range()` function requires the number of workers, the number of tasks,
 and a function that iterates over the range of tasks and executes them in a single worker.
 
 ```cpp
 #include "subpar/subpar.hpp"
 
-subpar::parallelize(
+subpar::parallelize_range(
     /* num_workers = */ 10,
     /* num_tasks = */ 12345,
     /* run = */ [&](int worker, int start, int len) {
@@ -32,8 +32,8 @@ subpar::parallelize(
 );
 ```
 
-If the `SUBPAR_CUSTOM_PARALLEL` function-like macro is defined, it is used in place of the default behavior whenever `subpar::parallelize()` is called.
-The macro should accept exactly the same arguments as `subpar::parallelize()`, but the macro author is now responsible for distributing tasks among workers.
+If the `SUBPAR_CUSTOM_PARALLELIZE` function-like macro is defined, it is used in place of the default behavior whenever `subpar::parallelize_range()` is called.
+The macro should accept exactly the same arguments as `subpar::parallelize_range()`, but the macro author is now responsible for distributing tasks among workers.
 This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc.
 
 Check out the [reference documentation](https://ltla.github.io/subpar) for more details.
