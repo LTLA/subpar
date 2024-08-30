@@ -158,7 +158,7 @@ Any return value is ignored.</td></tr>
 <li><code>w</code> is guaranteed to be in <code>[0, num_workers)</code>.</li>
 <li><code>[start, start + length)</code> is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">run_task_range()</a></code>.</li>
 </ul>
-This function may throw an exception. </td></tr>
+This function may throw an exception if <code>nothrow_ = false</code>. </td></tr>
   </table>
   </dd>
 </dl>
