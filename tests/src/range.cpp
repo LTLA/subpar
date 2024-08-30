@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
+#include <cstdint>
 
 #ifdef CUSTOM_PARALLEL_TEST
 template<typename Task_, typename Run_>
@@ -52,6 +53,29 @@ static void check_ranges(const std::vector<std::pair<int, int> >& ranges, int nu
     }
 
     EXPECT_EQ(last, num_tasks);
+}
+
+TEST(ParallelizeRange, SanitizeNumWorkers) {
+    EXPECT_EQ(subpar::sanitize_num_workers(10, 20), 10);
+    EXPECT_EQ(subpar::sanitize_num_workers(10, 5), 5);
+    EXPECT_EQ(subpar::sanitize_num_workers(-1, 5), 1);
+    EXPECT_EQ(subpar::sanitize_num_workers(0, 5), 1);
+
+    // Works correctly with different types.
+    EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<size_t>(5)), 5);
+    EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<size_t>(-1)), 10);
+
+    EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<uint8_t>(20)), 10);
+    EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<uint8_t>(-1)), 10);
+    EXPECT_EQ(subpar::sanitize_num_workers(1000, static_cast<uint8_t>(-1)), 255);
+
+    // Checking the internals.
+    EXPECT_TRUE(subpar::internal::ge(10, 10));
+    EXPECT_FALSE(subpar::internal::ge(10, 11));
+    EXPECT_TRUE(subpar::internal::ge(10, static_cast<uint8_t>(10)));
+    EXPECT_FALSE(subpar::internal::ge(10, static_cast<uint8_t>(11)));
+    EXPECT_TRUE(subpar::internal::ge(10, static_cast<size_t>(10)));
+    EXPECT_FALSE(subpar::internal::ge(10, static_cast<size_t>(11)));
 }
 
 TEST(ParallelizeRange, UsesOmp) {
