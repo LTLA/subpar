@@ -84,11 +84,11 @@ $(function() {
 
 <p>Parallelize across a range of tasks.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<div class="textblock"><code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
-<code>#include &quot;defs.hpp&quot;</code><br />
 </div>
 <p><a href="range_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -100,6 +100,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082" id="r_a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplParams" colspan="2">template&lt;<a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">typename</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Task_</a> &gt; </td></tr>
+<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">int</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a9a5cb3009789142bac13ce0e81f19082">subpar::sanitize_num_workers</a> (<a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">int</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">num_workers</a>, <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">Task_</a> <a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">num_tasks</a>)</td></tr>
+<tr class="memdesc:a9a5cb3009789142bac13ce0e81f19082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the number of workers to the number of tasks in <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.  <br /></td></tr>
+<tr class="separator:a9a5cb3009789142bac13ce0e81f19082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe" id="r_a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
 <tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
 <tr class="memdesc:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers.  <br /></td></tr>

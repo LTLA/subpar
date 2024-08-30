@@ -31,6 +31,13 @@
       <arglist>(Task_ num_tasks, Run_ run_task)</arglist>
     </member>
     <member kind="function">
+      <type>int</type>
+      <name>sanitize_num_workers</name>
+      <anchorfile>namespacesubpar.html</anchorfile>
+      <anchor>a9a5cb3009789142bac13ce0e81f19082</anchor>
+      <arglist>(int num_workers, Task_ num_tasks)</arglist>
+    </member>
+    <member kind="function">
       <type>void</type>
       <name>parallelize_range</name>
       <anchorfile>namespacesubpar.html</anchorfile>
