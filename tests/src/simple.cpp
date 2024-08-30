@@ -21,7 +21,7 @@ void stupid_parallel_simple(Task_ num_tasks, Run_ run) {
 #include "subpar/simple.hpp"
 
 TEST(ParallelizeSimple, UsesOmp) {
-#ifdef SUBPAR_USES_OPENMP
+#ifdef SUBPAR_USES_OPENMP_SIMPLE
     bool uses_openmp = SUBPAR_USES_OPENMP_SIMPLE;
 #else
     bool uses_openmp = false;
