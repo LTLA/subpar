@@ -6,8 +6,6 @@
 #include <stdexcept>
 #include <thread>
 #include <type_traits>
-
-#include "defs.hpp"
 #endif
 
 /**
@@ -24,8 +22,8 @@ namespace subpar {
  * This is most relevant when the overall computation has already been split up and assigned to workers outside of **subpar**.
  * In such cases, `parallelize_simple()` is more suitable than `parallelize_range()` as it avoids the unnecessary overhead of partitioning the task interval.
  * 
- * The `SUBPAR_USES_OPENMP` macro will be set to 1 iff OpenMP was used in the default scheme.
- * Users can define the `SUBPAR_NO_OPENMP` macro to force `parallelize_simple()` to use `<thread>` even if OpenMP is available.
+ * The `SUBPAR_USES_OPENMP_SIMPLE` macro will be defined as 1 if and only if OpenMP was used in the default scheme.
+ * Users can define the `SUBPAR_NO_OPENMP_SIMPLE` macro to force `parallelize_simple()` to use `<thread>` even if OpenMP is available.
  * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
  *
  * Advanced users can substitute in their own parallelization scheme by defining `SUBPAR_CUSTOM_PARALLELIZE_SIMPLE` before including the **subpar** header.
@@ -72,7 +70,9 @@ void parallelize_simple(Task_ num_tasks, Run_ run_task) {
     // Avoid instantiating a vector if it is known that the function can't throw.
     typename std::conditional<nothrow_, int, std::vector<std::exception_ptr> >::type errors(num_tasks);
 
-#ifdef SUBPAR_USES_OPENMP
+#if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP_SIMPLE)
+#define SUBPAR_USES_OPENMP_SIMPLE 1
+
     // OpenMP doesn't guarantee that we'll actually start 'num_tasks' workers,
     // so we need to do a loop here to ensure that each task simple is executed.
     #pragma omp parallel for num_threads(num_tasks)
@@ -89,6 +89,9 @@ void parallelize_simple(Task_ num_tasks, Run_ run_task) {
     }
 
 #else
+// Wiping it out, just in case.
+#undef SUBPAR_USES_OPENMP_SIMPLE
+
     std::vector<std::thread> workers;
     workers.reserve(num_tasks);
 

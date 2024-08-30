@@ -6,8 +6,6 @@
 #include <stdexcept>
 #include <thread>
 #include <type_traits>
-
-#include "defs.hpp"
 #endif
 
 /**
@@ -24,8 +22,8 @@ namespace subpar {
  * In the default parallelization scheme, we create `num_workers` evenly-sized intervals that are executed via OpenMP (if available) or `<thread>` (otherwise).
  * Not all workers may be used, e.g., if `num_tasks < num_workers`.
  * 
- * The `SUBPAR_USES_OPENMP` macro will be set to 1 iff OpenMP was used in the default scheme.
- * Users can define the `SUBPAR_NO_OPENMP` macro to force `parallelize_range()` to use `<thread>` even if OpenMP is available.
+ * The `SUBPAR_USES_OPENMP_RANGE` macro will be defined as 1 if and only if OpenMP was used in the default scheme.
+ * Users can define the `SUBPAR_NO_OPENMP_RANGE` macro to force `parallelize_range()` to use `<thread>` even if OpenMP is available.
  * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
  *
  * Advanced users can substitute in their own parallelization scheme by defining `SUBPAR_CUSTOM_PARALLELIZE_RANGE` before including the **subpar** header.
@@ -97,7 +95,10 @@ void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range) {
     // Avoid instantiating a vector if it is known that the function can't throw.
     typename std::conditional<nothrow_, int, std::vector<std::exception_ptr> >::type errors(num_workers);
 
-#ifdef SUBPAR_USES_OPENMP
+#if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP_RANGE) && !defined(SUBPAR_NO_OPENMP)
+#define SUBPAR_USES_OPENMP 1
+#define SUBPAR_USES_OPENMP_RANGE 1
+
     // OpenMP doesn't guarantee that we'll actually start 'num_workers' workers,
     // so we need to do a loop here to ensure that each task range is executed.
     #pragma omp parallel for num_threads(num_workers)
@@ -117,6 +118,10 @@ void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range) {
     }
 
 #else
+// Wiping it out, just in case.
+#undef SUBPAR_USES_OPENMP
+#undef SUBPAR_USES_OPENMP_RANGE
+
     Task_ start = 0;
     std::vector<std::thread> workers;
     workers.reserve(num_workers);

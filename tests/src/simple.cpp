@@ -7,18 +7,32 @@
 #ifdef CUSTOM_PARALLEL_TEST
 template<typename Task_, typename Run_>
 void stupid_parallel_simple(Task_ num_tasks, Run_ run) {
-    for (int t = 0; t < num_tasks; ++t) {
+    for (Task_ t = 0; t < num_tasks; ++t) {
         run(t);
     }
 }
 
-#define SUBPAR_CUSTOM_PARALLELIZE_RANGE stupid_parallel_simple
+#define SUBPAR_CUSTOM_PARALLELIZE_SIMPLE stupid_parallel_simple
 #ifdef CUSTOM_PARALLEL_TEST_NOTHROW
-#define SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW stupid_parallel_simple
+#define SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW stupid_parallel_simple
 #endif
 #endif
 
 #include "subpar/simple.hpp"
+
+TEST(ParallelizeSimple, UsesOmp) {
+#ifdef SUBPAR_USES_OPENMP
+    bool uses_openmp = SUBPAR_USES_OPENMP_SIMPLE;
+#else
+    bool uses_openmp = false;
+#endif
+
+#if defined(SUBPAR_CUSTOM_PARALLELIZE_SIMPLE) || !defined(_OPENMP)
+    EXPECT_FALSE(uses_openmp);
+#else
+    EXPECT_TRUE(uses_openmp);
+#endif
+}
 
 TEST(ParallelizeSimple, Basic) {
     std::vector<int> thread_counts { 0, 1, 3, 6, 7, 9, 11 };

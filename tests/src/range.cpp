@@ -56,12 +56,12 @@ static void check_ranges(const std::vector<std::pair<int, int> >& ranges, int nu
 
 TEST(ParallelizeRange, UsesOmp) {
 #ifdef SUBPAR_USES_OPENMP
-    bool uses_openmp = SUBPAR_USES_OPENMP;
+    bool uses_openmp = SUBPAR_USES_OPENMP_RANGE;
 #else
     bool uses_openmp = false;
 #endif
 
-#if defined(SUBPAR_CUSTOM_PARALLEL) || !defined(_OPENMP)
+#if defined(SUBPAR_CUSTOM_PARALLELIZE_RANGE) || !defined(_OPENMP)
     EXPECT_FALSE(uses_openmp);
 #else
     EXPECT_TRUE(uses_openmp);
