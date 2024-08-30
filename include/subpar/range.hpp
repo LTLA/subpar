@@ -111,7 +111,7 @@ int sanitize_num_workers(int num_workers, Task_ num_tasks) {
  * - `w` is guaranteed to be in `[0, num_workers)`.
  * - `[start, start + length)` is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to `run_task_range()`.
  * .
- * This function may throw an exception.
+ * This function may throw an exception if `nothrow_ = false`.
  */
 template<bool nothrow_ = false, typename Task_, class Run_>
 void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range) {
