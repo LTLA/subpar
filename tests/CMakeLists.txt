@@ -22,13 +22,7 @@ if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     set(DO_CODE_COVERAGE ON)
 endif()
 
-macro(create_executable target)
-    add_executable(
-        ${target}
-        src/range.cpp
-        src/simple.cpp
-    )
-
+macro(decorate_executable target)
     target_link_libraries(
         ${target}
         gtest_main
@@ -45,6 +39,15 @@ macro(create_executable target)
     gtest_discover_tests(${target})
 endmacro()
 
+macro(create_executable target)
+    add_executable(
+        ${target}
+        src/range.cpp
+        src/simple.cpp
+    )
+    decorate_executable(${target})
+endmacro()
+
 create_executable(libtest)
 
 create_executable(custest)
@@ -58,3 +61,9 @@ if(OpenMP_FOUND)
     create_executable(omptest)
     target_link_libraries(omptest OpenMP::OpenMP_CXX)
 endif()
+
+add_executable(
+    testtest
+    src/test.cpp
+)
+decorate_executable(testtest)

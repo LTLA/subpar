@@ -87,6 +87,13 @@ int sanitize_num_workers(int num_workers, Task_ num_tasks) {
  * For custom schemes, if `SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW` is defined, it will be used if `nothrow_ = true`;
  * otherwise, `SUBPAR_CUSTOM_PARALLELIZE_RANGE` will continue to be used.
  *
+ * It is worth stressing that `run_task_range()` may be called multiple times in the same worker, i.e., with the same `w` but different `start` and `length` (not necessarily contiguous).
+ * Any use of `w` by `run_task_range()` should be robust to any number of previous calls with the same `w`.
+ * For example, if `w` is used to store thread-specific results for use outside `parallelize_range()`,
+ * the results should be accumulated in a manner that preserves the results of previous calls. 
+ * If the code must be run exactly once per worker, consider using `parallelize_simple()` instead.
+ * Developers may also consider using `silly_parallelize_range()` for testing for correct use of `w`.
+ *
  * @tparam nothrow_ Whether the `Run_` function cannot throw an exception.
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts three arguments:
@@ -109,7 +116,8 @@ int sanitize_num_workers(int num_workers, Task_ num_tasks) {
  * This may be called zero, one or multiple times in any particular worker.
  * In each call:
  * - `w` is guaranteed to be in `[0, num_workers)`.
- * - `[start, start + length)` is guaranteed to be a valid and non-empty range of tasks that does not overlap with any other range in any other call to `run_task_range()`.
+ * - `[start, start + length)` is guaranteed to be a non-empty range of tasks that lies in `[0, num_tasks)`.
+ *   It will not overlap with any other range in any other call to `run_task_range()`.
  * .
  * This function may throw an exception if `nothrow_ = false`.
  */
@@ -226,7 +234,6 @@ void parallelize(int num_workers, Task_ num_tasks, Run_ run_task_range) {
 /**
  * @endcond
  */
-
 
 }
 
