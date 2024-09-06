@@ -93,7 +93,7 @@ Quick start</h1>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacesubpar_html_a9c64cc17f4f8d1fadbba6d25053a8dbe"><div class="ttname"><a href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a></div><div class="ttdeci">void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:125</div></div>
+<div class="ttc" id="anamespacesubpar_html_a9c64cc17f4f8d1fadbba6d25053a8dbe"><div class="ttname"><a href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a></div><div class="ttdeci">void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:126</div></div>
 <div class="ttc" id="asubpar_8hpp_html"><div class="ttname"><a href="subpar_8hpp.html">subpar.hpp</a></div><div class="ttdoc">Substitutable parallelization functions.</div></div>
 </div><!-- fragment --><p><code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> functions will correctly handle exceptions thrown in the user-supplied function. This comes with some slight overhead so the user can set the <code>nothrow_</code> template parameter to <code>false</code> if they can guarantee that their supplied functions will not throw.</p>
 <p>On occasion, the user has already assigned a task to each worker outside of <b>subpar</b>. This is handled by <code><a class="el" href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code>, which will execute each task in its own worker without the overhead of task range partitioning.</p>
@@ -105,12 +105,28 @@ Quick start</h1>
 <div class="line">        <span class="comment">// ...process each task ...</span></div>
 <div class="line">    }</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacesubpar_html_abd9eeb2cbaaf14382b926674c47b9d73"><div class="ttname"><a href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73">subpar::parallelize_simple</a></div><div class="ttdeci">void parallelize_simple(Task_ num_tasks, Run_ run_task)</div><div class="ttdoc">Parallelize individual tasks across workers.</div><div class="ttdef"><b>Definition</b> simple.hpp:50</div></div>
+<div class="ttc" id="anamespacesubpar_html_abd9eeb2cbaaf14382b926674c47b9d73"><div class="ttname"><a href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73">subpar::parallelize_simple</a></div><div class="ttdeci">void parallelize_simple(Task_ num_tasks, Run_ run_task)</div><div class="ttdoc">Parallelize individual tasks across workers.</div><div class="ttdef"><b>Definition</b> simple.hpp:51</div></div>
 </div><!-- fragment --><p>Check out the <a href="https://ltla.github.io/subpar">reference documentation</a> for more details.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Custom parallelization</h1>
-<p>If the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> function-like macro is defined, it is used in place of the default behavior whenever <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> is called. The macro should accept exactly the same arguments as <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code>, but the macro author is now responsible for distributing tasks among workers. This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc. The same approach can be applied to <code><a class="el" href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code> via the <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> macro.</p>
-<p>Users can additionally define the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> or <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW</code> macros. These will be used in place of their non-<code>NOTHROW</code> counterparts in the <code>nothrow_ = true</code> case, providing an optimization opportunity for custom parallelization schemes when exception handling is not required. Note that the non-<code>NOTHROW</code> macros still need to be defined before the <code>NOTHROW</code> macros can be used, even if all calls to <b>subpar</b> functions use <code>nothrow_ = true</code>.</p>
+<p>If the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> macro is defined, it is used in place of the default behavior whenever <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> is called. The macro should accept exactly the same arguments as <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code>, but the macro author is now responsible for distributing tasks among workers. This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc. The same approach can be applied to <code><a class="el" href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code> via the <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> macro.</p>
+<div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Task_, <span class="keyword">class</span> Run_&gt;</div>
+<div class="line"><span class="keywordtype">void</span> silly_parallelize(<span class="keywordtype">int</span> workers, Task_ jobs, Run_ run) {</div>
+<div class="line">    <span class="comment">// Doesn&#39;t actually parallelize at all; hence, silly!</span></div>
+<div class="line">    run(0, 0, jobs); </div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Can define a macro:</span></div>
+<div class="line"><span class="preprocessor">#define SUBPAR_CUSTOM_PARALLELIZE_RANGE ::silly_parallelize</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Or, can define a function-like macro</span></div>
+<div class="line"><span class="preprocessor">#define SUBPAR_CUSTOM_PARALLELIZE_RANGE(w, j, r) ::silly_parallelize(w, j, r)</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Finally, include the subpar headers:</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="subpar_8hpp.html">subpar/subpar.hpp</a>&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// And now use the subpar functions...</span></div>
+</div><!-- fragment --><p>Users can additionally define the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> or <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW</code> macros. These will be used in place of their non-<code>NOTHROW</code> counterparts in the <code>nothrow_ = true</code> case, providing an optimization opportunity for custom parallelization schemes when exception handling is not required. Note that the non-<code>NOTHROW</code> macros still need to be defined before the <code>NOTHROW</code> macros can be used, even if all calls to <b>subpar</b> functions use <code>nothrow_ = true</code>.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Building projects</h1>
 <h2><a class="anchor" id="autotoc_md5"></a>
