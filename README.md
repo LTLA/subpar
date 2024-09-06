@@ -53,10 +53,29 @@ Check out the [reference documentation](https://ltla.github.io/subpar) for more 
 
 ## Custom parallelization 
 
-If the `SUBPAR_CUSTOM_PARALLELIZE_RANGE` function-like macro is defined, it is used in place of the default behavior whenever `subpar::parallelize_range()` is called.
+If the `SUBPAR_CUSTOM_PARALLELIZE_RANGE` macro is defined, it is used in place of the default behavior whenever `subpar::parallelize_range()` is called.
 The macro should accept exactly the same arguments as `subpar::parallelize_range()`, but the macro author is now responsible for distributing tasks among workers.
 This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc.
 The same approach can be applied to `subpar::parallelize_simple()` via the `SUBPAR_CUSTOM_PARALLELIZE_SIMPLE` macro.
+
+```cpp
+template<typename Task_, class Run_>
+void silly_parallelize(int workers, Task_ jobs, Run_ run) {
+    // Doesn't actually parallelize at all; hence, silly!
+    run(0, 0, jobs); 
+}
+
+// Can define a macro:
+#define SUBPAR_CUSTOM_PARALLELIZE_RANGE ::silly_parallelize
+
+// Or, can define a function-like macro
+#define SUBPAR_CUSTOM_PARALLELIZE_RANGE(w, j, r) ::silly_parallelize(w, j, r)
+
+// Finally, include the subpar headers:
+#include "subpar/subpar.hpp"
+
+// And now use the subpar functions...
+```
 
 Users can additionally define the `SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW` or `SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW` macros.
 These will be used in place of their non-`NOTHROW` counterparts in the `nothrow_ = true` case,

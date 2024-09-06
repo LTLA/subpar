@@ -79,7 +79,8 @@ int sanitize_num_workers(int num_workers, Task_ num_tasks) {
  * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
  *
  * Advanced users can substitute in their own parallelization scheme by defining `SUBPAR_CUSTOM_PARALLELIZE_RANGE` before including the **subpar** header.
- * This should be a function-like macro accept the same arguments as `parallelize_range()` and will be used instead of the default scheme whenever `parallelize_range()` is called.
+ * This should be a function-like macro that accepts the same arguments as `parallelize_range()` or the name of a function that accepts the same arguments as `parallelize_range()`.
+ * If defined, the custom scheme will be used instead of the default scheme whenever `parallelize_range()` is called.
  * Macro authors should note the expectations on `run_task_range()`.
  *
  * If `nothrow_ = true`, exception handling is omitted from the default parallelization scheme.
