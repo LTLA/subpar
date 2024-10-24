@@ -18,7 +18,20 @@
     <filename>subpar_8hpp.html</filename>
     <includes id="range_8hpp" name="range.hpp" local="yes" import="no" module="no" objc="no">range.hpp</includes>
     <includes id="simple_8hpp" name="simple.hpp" local="yes" import="no" module="no" objc="no">simple.hpp</includes>
+    <includes id="vectorizable_8hpp" name="vectorizable.hpp" local="yes" import="no" module="no" objc="no">vectorizable.hpp</includes>
     <namespace>subpar</namespace>
+  </compound>
+  <compound kind="file">
+    <name>vectorizable.hpp</name>
+    <path>subpar/</path>
+    <filename>vectorizable_8hpp.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>SUBPAR_VECTORIZABLE</name>
+      <anchorfile>vectorizable_8hpp.html</anchorfile>
+      <anchor>a36139be73df6d149d0873468819ed2ed</anchor>
+      <arglist></arglist>
+    </member>
   </compound>
   <compound kind="namespace">
     <name>subpar</name>

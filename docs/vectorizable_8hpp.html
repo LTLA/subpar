@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>subpar: subpar/subpar.hpp Source File</title>
+<title>subpar: subpar/vectorizable.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -48,11 +48,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-<script type="text/javascript">
-/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(document).ready(function() { init_codefold(0); });
-/* @license-end */
-</script>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -80,25 +75,42 @@ $(document).ready(function() { init_codefold(0); });
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">subpar.hpp</div></div>
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">vectorizable.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="subpar_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef SUBPAR_SUBPAR_HPP</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define SUBPAR_SUBPAR_HPP</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;test.hpp&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="range_8hpp.html">range.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="simple_8hpp.html">simple.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="vectorizable_8hpp.html">vectorizable.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacesubpar.html">subpar</a> {}</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="anamespacesubpar_html"><div class="ttname"><a href="namespacesubpar.html">subpar</a></div><div class="ttdoc">Substitutable parallelization functions.</div></div>
-<div class="ttc" id="arange_8hpp_html"><div class="ttname"><a href="range_8hpp.html">range.hpp</a></div><div class="ttdoc">Parallelize across a range of tasks.</div></div>
-<div class="ttc" id="asimple_8hpp_html"><div class="ttname"><a href="simple_8hpp.html">simple.hpp</a></div><div class="ttdoc">Parallelize individual tasks across workers.</div></div>
-<div class="ttc" id="avectorizable_8hpp_html"><div class="ttname"><a href="vectorizable_8hpp.html">vectorizable.hpp</a></div><div class="ttdoc">Indicate that a loop is vectorizable.</div></div>
-</div><!-- fragment --></div><!-- contents -->
+
+<p>Indicate that a loop is vectorizable.  
+<a href="#details">More...</a></p>
+
+<p><a href="vectorizable_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a36139be73df6d149d0873468819ed2ed" id="r_a36139be73df6d149d0873468819ed2ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vectorizable_8hpp.html#a36139be73df6d149d0873468819ed2ed">SUBPAR_VECTORIZABLE</a></td></tr>
+<tr class="separator:a36139be73df6d149d0873468819ed2ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Indicate that a loop is vectorizable. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a36139be73df6d149d0873468819ed2ed" name="a36139be73df6d149d0873468819ed2ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36139be73df6d149d0873468819ed2ed">&#9670;&#160;</a></span>SUBPAR_VECTORIZABLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SUBPAR_VECTORIZABLE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Indicate a loop can be safely vectorized by promising that there are no dependencies between loop iterations. This should be added above the loop and is replaced by a compiler-specific pragma. Note that the use of this macro does not force vectorization. Rather, it only provides a hint to the compiler that auto-vectorization is possible; the decision to vectorize or not is left to the compiler's cost model.</p>
+<p>This pragma is most useful for indicating that indexed access operations are independent, as the compiler has no other way of knowing that an access in an iteration does not alter the value for the next iteration. However, it can also be beneficial for loops where auto-vectorization is relatively trivial, as it eliminates the need for pre-loop protection against aliasing pointers. </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
