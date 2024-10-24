@@ -4,6 +4,7 @@
 #include "test.hpp"
 #include "range.hpp"
 #include "simple.hpp"
+#include "vectorizable.hpp"
 
 /**
  * @file subpar.hpp

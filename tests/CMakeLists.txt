@@ -39,26 +39,38 @@ macro(decorate_executable target)
     gtest_discover_tests(${target})
 endmacro()
 
-macro(create_executable target)
-    add_executable(
-        ${target}
-        src/range.cpp
-        src/simple.cpp
-    )
-    decorate_executable(${target})
-endmacro()
+add_executable(
+    libtest
+    src/range.cpp
+    src/simple.cpp
+    src/vectorizable.cpp
+)
+decorate_executable(libtest)
 
-create_executable(libtest)
-
-create_executable(custest)
+add_executable(
+    custest
+    src/range.cpp
+    src/simple.cpp
+)
+decorate_executable(custest)
 target_compile_definitions(custest PRIVATE CUSTOM_PARALLEL_TEST=1)
 
-create_executable(cusnothrowtest)
+add_executable(
+    cusnothrowtest
+    src/range.cpp
+    src/simple.cpp
+)
+decorate_executable(cusnothrowtest)
 target_compile_definitions(cusnothrowtest PRIVATE CUSTOM_PARALLEL_TEST=1 CUSTOM_PARALLEL_TEST_NOTHROW=1)
 
 find_package(OpenMP)
 if(OpenMP_FOUND)
-    create_executable(omptest)
+    add_executable(
+        omptest
+        src/range.cpp
+        src/simple.cpp
+    )
+    decorate_executable(omptest)
     target_link_libraries(omptest OpenMP::OpenMP_CXX)
 endif()
 
