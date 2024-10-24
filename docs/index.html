@@ -128,8 +128,17 @@ Custom parallelization</h1>
 <div class="line"><span class="comment">// And now use the subpar functions...</span></div>
 </div><!-- fragment --><p>Users can additionally define the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> or <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW</code> macros. These will be used in place of their non-<code>NOTHROW</code> counterparts in the <code>nothrow_ = true</code> case, providing an optimization opportunity for custom parallelization schemes when exception handling is not required. Note that the non-<code>NOTHROW</code> macros still need to be defined before the <code>NOTHROW</code> macros can be used, even if all calls to <b>subpar</b> functions use <code>nothrow_ = true</code>.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
+Encouraging vectorization</h1>
+<p>We can use the <code>SUBPAR_VECTORIZABLE</code> macro to indicate that loop iterations are independent. This uses compiler-specific pragmas to encourage vectorization of the loop with the relevant SIMD instructions. Unlike other schemes (e.g., OpenMP SIMD), it does not force vectorization; it only hints to the compiler that auto-vectorization is possible. The decision to vectorize or not is ultimately left to the compiler and its cost model.</p>
+<div class="fragment"><div class="line"><a class="code hl_define" href="vectorizable_8hpp.html#a36139be73df6d149d0873468819ed2ed">SUBPAR_VECTORIZABLE</a></div>
+<div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; n; ++i) {</div>
+<div class="line">    buffer[i] += values[indices[i]];</div>
+<div class="line">}</div>
+<div class="ttc" id="avectorizable_8hpp_html_a36139be73df6d149d0873468819ed2ed"><div class="ttname"><a href="vectorizable_8hpp.html#a36139be73df6d149d0873468819ed2ed">SUBPAR_VECTORIZABLE</a></div><div class="ttdeci">#define SUBPAR_VECTORIZABLE</div><div class="ttdef"><b>Definition</b> vectorizable.hpp:23</div></div>
+</div><!-- fragment --><p>This macro is most useful for indicating that indexed access operations are independent, as the compiler has no other way of knowing that an access in one iteration does not alter the value for the next iteration. It can also be beneficial for loops where auto-vectorization is relatively trivial, as it eliminates the need for pre-loop protection against aliasing pointers.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Building projects</h1>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 CMake with &lt;tt&gt;FetchContent&lt;/tt&gt;</h2>
 <p>If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
@@ -147,7 +156,7 @@ CMake with &lt;tt&gt;FetchContent&lt;/tt&gt;</h2>
 <div class="line"> </div>
 <div class="line"># For libaries</div>
 <div class="line">target_link_libraries(mylib INTERFACE subpar)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 CMake with &lt;tt&gt;find_package()&lt;/tt&gt;</h2>
 <p>You can install the library by cloning a suitable version of this repository and running the following commands:</p>
 <div class="fragment"><div class="line">mkdir build &amp;&amp; cd build</div>
@@ -156,7 +165,7 @@ CMake with &lt;tt&gt;find_package()&lt;/tt&gt;</h2>
 </div><!-- fragment --><p>Then you can use <code>find_package()</code> as usual:</p>
 <div class="fragment"><div class="line">find_package(ltla_subpar CONFIG REQUIRED)</div>
 <div class="line">target_link_libraries(mylib INTERFACE ltla::subpar)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Manual</h2>
 <p>If you're not using CMake, the simple approach is to just copy the files in the <code>include/</code> subdirectory - either directly or with Git submodules - and include their path during compilation with, e.g., GCC's <code>-I</code>. </p>
 </div></div><!-- PageDoc -->

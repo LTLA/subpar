@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['range_2ehpp_0',['range.hpp',['../range_8hpp.html',1,'']]]
+  ['quick_20start_0',['Quick start',['../index.html#autotoc_md2',1,'']]]
 ];
