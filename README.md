@@ -82,6 +82,25 @@ These will be used in place of their non-`NOTHROW` counterparts in the `nothrow_
 providing an optimization opportunity for custom parallelization schemes when exception handling is not required.
 Note that the non-`NOTHROW` macros still need to be defined before the `NOTHROW` macros can be used, even if all calls to **subpar** functions use `nothrow_ = true`.
 
+## Encouraging vectorization
+
+We can use the `SUBPAR_VECTORIZABLE` macro to indicate that loop iterations are independent.
+This uses compiler-specific pragmas to encourage vectorization of the loop with the relevant SIMD instructions.
+Unlike other schemes (e.g., OpenMP SIMD), it does not force vectorization; it only hints to the compiler that auto-vectorization is possible.
+The decision to vectorize or not is ultimately left to the compiler and its cost model.
+
+```cpp
+SUBPAR_VECTORIZABLE
+for (size_t i = 0; i < n; ++i) {
+    buffer[i] += values[indices[i]];
+}
+```
+
+This macro is most useful for indicating that indexed access operations are independent,
+as the compiler has no other way of knowing that an access in one iteration does not alter the value for the next iteration.
+It can also be beneficial for loops where auto-vectorization is relatively trivial,
+as it eliminates the need for pre-loop protection against aliasing pointers.
+
 ## Building projects 
 
 ### CMake with `FetchContent`
