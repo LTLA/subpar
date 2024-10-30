@@ -134,7 +134,7 @@ Encouraging vectorization</h1>
 <div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; n; ++i) {</div>
 <div class="line">    buffer[i] += values[indices[i]];</div>
 <div class="line">}</div>
-<div class="ttc" id="avectorizable_8hpp_html_a36139be73df6d149d0873468819ed2ed"><div class="ttname"><a href="vectorizable_8hpp.html#a36139be73df6d149d0873468819ed2ed">SUBPAR_VECTORIZABLE</a></div><div class="ttdeci">#define SUBPAR_VECTORIZABLE</div><div class="ttdef"><b>Definition</b> vectorizable.hpp:23</div></div>
+<div class="ttc" id="avectorizable_8hpp_html_a36139be73df6d149d0873468819ed2ed"><div class="ttname"><a href="vectorizable_8hpp.html#a36139be73df6d149d0873468819ed2ed">SUBPAR_VECTORIZABLE</a></div><div class="ttdeci">#define SUBPAR_VECTORIZABLE</div><div class="ttdef"><b>Definition</b> vectorizable.hpp:28</div></div>
 </div><!-- fragment --><p>This macro is most useful for indicating that indexed access operations are independent, as the compiler has no other way of knowing that an access in one iteration does not alter the value for the next iteration. It can also be beneficial for loops where auto-vectorization is relatively trivial, as it eliminates the need for pre-loop protection against aliasing pointers.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Building projects</h1>
