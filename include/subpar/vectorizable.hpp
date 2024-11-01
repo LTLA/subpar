@@ -15,15 +15,21 @@
 #define SUBPAR_VECTORIZABLE _Pragma("loop(ivdep)")
 #else
 /**
- * Indicate a `for` loop can be safely vectorized by promising that there are no dependencies between loop iterations.
+ * Indicate a `for` loop can be safely vectorized by promising that there are no data dependencies between loop iterations.
  * This should be added above the loop and is replaced by a compiler-specific pragma.
- * Use of this macro does not force vectorization of the loop;
- * the decision to vectorize or not is left to the compiler's cost model.
+ * Unlike other directives like OpenMP SIMD, use of this macro does not force vectorization of the loop.
+ * Rather, the decision to auto-vectorize or not is left to the compiler and its cost model.
  *
- * Needless to say, this macro should only be used when the loop iterations are independent.
- * The loop body should not perform any reductions or modify any shared values.
- * (Assignments to different values of the same array are obviously allowed.)
- * To be safe, the loop statements should only modify a single variable, namely the counter or iterator used to define the loop.
+ * The nature of this macro means that the exact interpretation of "safe to vectorize" is compiler-specific.
+ * For example, are all data dependencies ignored? Or just non-proven ones?
+ * To ensure portable use of this macro, we recommend the most conservative interpretation:
+ *
+ * - The `for` loop should operate by modifying a single integer value by a constant.
+ *   Avoid iterators as these may hold extra mutable state that may interfere with correct vectorization.
+ * - Different iterations of the loop should be executable in any order and/or concurrently without affecting the results.
+ *   This implies that iterations should not modify a shared value, e.g., no reductions.
+ * - Read and write operations should only be performed to arrays, via pointers or standard wrappers around them - typically `std::vector`.
+ *   This avoids unanticipated side-effects from other containers' access operators, as implied by the previous constraint. 
  */
 #define SUBPAR_VECTORIZABLE
 #endif
