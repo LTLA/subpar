@@ -105,8 +105,13 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Indicate a <code>for</code> loop can be safely vectorized by promising that there are no dependencies between loop iterations. This should be added above the loop and is replaced by a compiler-specific pragma. Use of this macro does not force vectorization of the loop; the decision to vectorize or not is left to the compiler's cost model.</p>
-<p>Needless to say, this macro should only be used when the loop iterations are independent. The loop body should not perform any reductions or modify any shared values. (Assignments to different values of the same array are obviously allowed.) To be safe, the loop statements should only modify a single variable, namely the counter or iterator used to define the loop. </p>
+<p>Indicate a <code>for</code> loop can be safely vectorized by promising that there are no data dependencies between loop iterations. This should be added above the loop and is replaced by a compiler-specific pragma. Unlike other directives like OpenMP SIMD, use of this macro does not force vectorization of the loop. Rather, the decision to auto-vectorize or not is left to the compiler and its cost model.</p>
+<p>The nature of this macro means that the exact interpretation of "safe to vectorize" is compiler-specific. For example, are all data dependencies ignored? Or just non-proven ones? To ensure portable use of this macro, we recommend the most conservative interpretation:</p>
+<ul>
+<li>The <code>for</code> loop should operate by modifying a single integer value by a constant. Avoid iterators as these may hold extra mutable state that may interfere with correct vectorization.</li>
+<li>Different iterations of the loop should be executable in any order and/or concurrently without affecting the results. This implies that iterations should not modify a shared value, e.g., no reductions.</li>
+<li>Read and write operations should only be performed to arrays, via pointers or standard wrappers around them - typically <code>std::vector</code>. This avoids unanticipated side-effects from other containers' access operators, as implied by the previous constraint. </li>
+</ul>
 
 </div>
 </div>
