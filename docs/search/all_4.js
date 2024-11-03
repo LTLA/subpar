@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['libraries_0',['Substitutable parallelization for C++ libraries',['../index.html',1,'']]]
+  ['manual_0',['Manual',['../index.html#autotoc_md7',1,'']]]
 ];
