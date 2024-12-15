@@ -51,13 +51,13 @@ bool ge(int num_workers, Task_ num_tasks) { // We already assume that both of th
  * This should be a non-negative integer.
  *
  * @return A more suitable number of workers.
- * Negative or zero `num_workers` are treated as 1.
+ * Negative or zero `num_workers` are converted to 1 if `num_tasks > 0`, otherwise zero.
  * If `num_workers` is greater than `num_tasks`, the former is set to the latter.
  */
 template<typename Task_>
 int sanitize_num_workers(int num_workers, Task_ num_tasks) {
     if (num_workers <= 0) {
-        return 1;
+        return (num_tasks > 0);
     }
 
     if (internal::ge(num_workers, num_tasks)) {

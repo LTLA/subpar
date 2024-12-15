@@ -60,6 +60,8 @@ TEST(ParallelizeRange, SanitizeNumWorkers) {
     EXPECT_EQ(subpar::sanitize_num_workers(10, 5), 5);
     EXPECT_EQ(subpar::sanitize_num_workers(-1, 5), 1);
     EXPECT_EQ(subpar::sanitize_num_workers(0, 5), 1);
+    EXPECT_EQ(subpar::sanitize_num_workers(10, 0), 0);
+    EXPECT_EQ(subpar::sanitize_num_workers(0, 0), 0);
 
     // Works correctly with different types.
     EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<size_t>(5)), 5);
