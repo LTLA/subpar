@@ -260,7 +260,7 @@ template&lt;<a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d2505
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A more suitable number of workers. Negative or zero <code>num_workers</code> are treated as 1. If <code>num_workers</code> is greater than <code>num_tasks</code>, the former is set to the latter. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A more suitable number of workers. Negative or zero <code>num_workers</code> are converted to 1 if <code>num_tasks &gt; 0</code>, otherwise zero. If <code>num_workers</code> is greater than <code>num_tasks</code>, the former is set to the latter. </dd></dl>
 
 </div>
 </div>

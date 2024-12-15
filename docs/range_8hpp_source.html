@@ -113,7 +113,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="namespacesubpar.html#a9a5cb3009789142bac13ce0e81f19082">   58</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="namespacesubpar.html#a9a5cb3009789142bac13ce0e81f19082">sanitize_num_workers</a>(<span class="keywordtype">int</span> num_workers, Task_ num_tasks) {</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">if</span> (num_workers &lt;= 0) {</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordflow">return</span> (num_tasks &gt; 0);</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    }</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordflow">if</span> (internal::ge(num_workers, num_tasks)) {</div>
