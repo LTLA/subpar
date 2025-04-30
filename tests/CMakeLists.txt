@@ -61,9 +61,3 @@ if(OpenMP_FOUND)
     create_executable(omptest)
     target_link_libraries(omptest OpenMP::OpenMP_CXX)
 endif()
-
-add_executable(
-    testtest
-    src/test.cpp
-)
-decorate_executable(testtest)
