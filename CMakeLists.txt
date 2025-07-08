@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 project(subpar
-    VERSION 0.4.0
+    VERSION 0.4.1
     DESCRIPTION "Substitutable parallelization for C++ libraries"
     LANGUAGES CXX)
 

@@ -2,12 +2,12 @@
 #define SUBPAR_RANGE_HPP
 
 #include <limits>
+#include <type_traits>
 
 #ifndef SUBPAR_CUSTOM_PARALLELIZE_RANGE
 #include <vector>
 #include <stdexcept>
 #include <thread>
-#include <type_traits>
 #endif
 
 /**
@@ -24,10 +24,19 @@ namespace internal {
 
 template<typename Task_>
 bool ge(int num_workers, Task_ num_tasks) { // We already assume that both of them are non-negative at this point.
-    if constexpr(static_cast<size_t>(std::numeric_limits<int>::max()) > static_cast<size_t>(std::numeric_limits<Task_>::max())) {
-        return num_workers >= static_cast<int>(num_tasks);
+    return static_cast<typename std::make_unsigned<int>::type>(num_workers) >= static_cast<typename std::make_unsigned<Task_>::type>(num_tasks);
+}
+
+template<bool nothrow_, typename NumWorkers_>
+auto create_error_vector(NumWorkers_ num_workers) {
+    if constexpr(nothrow_) {
+        return 0; // Avoid instantiating a vector if it is known that the function can't throw.
     } else {
-        return static_cast<Task_>(num_workers) >= num_tasks;
+        typedef std::vector<std::exception_ptr> Output;
+        if (static_cast<typename std::make_unsigned<NumWorkers_>::type>(num_workers) > std::numeric_limits<typename Output::size_type>::max()) {
+            throw std::runtime_error("cannot allocate the 'errors' vector");
+        }
+        return Output(num_workers);
     }
 }
 
@@ -150,8 +159,7 @@ void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range) {
         remainder = num_tasks % num_workers;
     }
 
-    // Avoid instantiating a vector if it is known that the function can't throw.
-    typename std::conditional<nothrow_, int, std::vector<std::exception_ptr> >::type errors(num_workers);
+    auto errors = internal::create_error_vector<nothrow_>(num_workers);
 
 #if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP_RANGE) && !defined(SUBPAR_NO_OPENMP)
 #define SUBPAR_USES_OPENMP 1

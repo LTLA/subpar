@@ -1,6 +1,8 @@
 #ifndef SUBPAR_SIMPLE_HPP
 #define SUBPAR_SIMPLE_HPP
 
+#include "range.hpp"
+
 #ifndef SUBPAR_CUSTOM_PARALLELIZE_SIMPLE
 #include <vector>
 #include <stdexcept>
@@ -68,8 +70,7 @@ void parallelize_simple(Task_ num_tasks, Run_ run_task) {
         return;
     }
 
-    // Avoid instantiating a vector if it is known that the function can't throw.
-    typename std::conditional<nothrow_, int, std::vector<std::exception_ptr> >::type errors(num_tasks);
+    auto errors = internal::create_error_vector<nothrow_>(num_tasks);
 
 #if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP_SIMPLE)
 #define SUBPAR_USES_OPENMP_SIMPLE 1
