@@ -10,6 +10,7 @@
     <name>simple.hpp</name>
     <path>subpar/</path>
     <filename>simple_8hpp.html</filename>
+    <includes id="range_8hpp" name="range.hpp" local="yes" import="no" module="no" objc="no">range.hpp</includes>
     <namespace>subpar</namespace>
   </compound>
   <compound kind="file">

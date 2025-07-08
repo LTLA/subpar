@@ -109,7 +109,7 @@ Quick start</h1>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacesubpar_html_a9c64cc17f4f8d1fadbba6d25053a8dbe"><div class="ttname"><a href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a></div><div class="ttdeci">void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:119</div></div>
+<div class="ttc" id="anamespacesubpar_html_a9c64cc17f4f8d1fadbba6d25053a8dbe"><div class="ttname"><a href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a></div><div class="ttdeci">void parallelize_range(int num_workers, Task_ num_tasks, Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:128</div></div>
 <div class="ttc" id="asubpar_8hpp_html"><div class="ttname"><a href="subpar_8hpp.html">subpar.hpp</a></div><div class="ttdoc">Substitutable parallelization functions.</div></div>
 </div><!-- fragment --><p><code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> functions will correctly handle exceptions thrown in the user-supplied function. This comes with some slight overhead so the user can set the <code>nothrow_</code> template parameter to <code>false</code> if they can guarantee that their supplied functions will not throw.</p>
 <p>On occasion, the user has already assigned a task to each worker outside of <b>subpar</b>. This is handled by <code><a class="el" href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code>, which will execute each task in its own worker without the overhead of task range partitioning.</p>
@@ -121,7 +121,7 @@ Quick start</h1>
 <div class="line">        <span class="comment">// ...process each task ...</span></div>
 <div class="line">    }</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacesubpar_html_abd9eeb2cbaaf14382b926674c47b9d73"><div class="ttname"><a href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73">subpar::parallelize_simple</a></div><div class="ttdeci">void parallelize_simple(Task_ num_tasks, Run_ run_task)</div><div class="ttdoc">Parallelize individual tasks across workers.</div><div class="ttdef"><b>Definition</b> simple.hpp:51</div></div>
+<div class="ttc" id="anamespacesubpar_html_abd9eeb2cbaaf14382b926674c47b9d73"><div class="ttname"><a href="namespacesubpar.html#abd9eeb2cbaaf14382b926674c47b9d73">subpar::parallelize_simple</a></div><div class="ttdeci">void parallelize_simple(Task_ num_tasks, Run_ run_task)</div><div class="ttdoc">Parallelize individual tasks across workers.</div><div class="ttdef"><b>Definition</b> simple.hpp:53</div></div>
 </div><!-- fragment --><p>Check out the <a href="https://ltla.github.io/subpar">reference documentation</a> for more details.</p>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Custom parallelization</h1>
