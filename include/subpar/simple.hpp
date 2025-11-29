@@ -50,7 +50,7 @@ namespace subpar {
  * This function may throw an exception if `nothrow_ = false`.
  */
 template<bool nothrow_ = false, typename Task_, class Run_>
-void parallelize_simple(Task_ num_tasks, Run_ run_task) {
+void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 #ifdef SUBPAR_CUSTOM_PARALLELIZE_SIMPLE
     if constexpr(nothrow_) {
 #ifdef SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW
@@ -70,7 +70,14 @@ void parallelize_simple(Task_ num_tasks, Run_ run_task) {
         return;
     }
 
-    auto errors = internal::create_error_vector<nothrow_>(num_tasks);
+    // Avoid instantiating a vector if it is known that the function can't throw.
+    auto errors = [&]{
+        if constexpr(nothrow_) {
+            return true;
+        } else {
+            return sanisizer::create<std::vector<std::exception_ptr> >(num_tasks);
+        }
+    }();
 
 #if defined(_OPENMP) && !defined(SUBPAR_NO_OPENMP_SIMPLE)
 #define SUBPAR_USES_OPENMP_SIMPLE 1
@@ -95,7 +102,7 @@ void parallelize_simple(Task_ num_tasks, Run_ run_task) {
 #undef SUBPAR_USES_OPENMP_SIMPLE
 
     std::vector<std::thread> workers;
-    workers.reserve(num_tasks);
+    workers.reserve(sanisizer::cast<decltype(workers.size())>(num_tasks)); // make sure we don't get alloc errors during emplace_back().
 
     for (Task_ w = 0; w < num_tasks; ++w) {
         if constexpr(nothrow_) {

@@ -70,14 +70,6 @@ TEST(ParallelizeRange, SanitizeNumWorkers) {
     EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<uint8_t>(20)), 10);
     EXPECT_EQ(subpar::sanitize_num_workers(10, static_cast<uint8_t>(-1)), 10);
     EXPECT_EQ(subpar::sanitize_num_workers(1000, static_cast<uint8_t>(-1)), 255);
-
-    // Checking the internals.
-    EXPECT_TRUE(subpar::internal::ge(10, 10));
-    EXPECT_FALSE(subpar::internal::ge(10, 11));
-    EXPECT_TRUE(subpar::internal::ge(10, static_cast<uint8_t>(10)));
-    EXPECT_FALSE(subpar::internal::ge(10, static_cast<uint8_t>(11)));
-    EXPECT_TRUE(subpar::internal::ge(10, static_cast<size_t>(10)));
-    EXPECT_FALSE(subpar::internal::ge(10, static_cast<size_t>(11)));
 }
 
 TEST(ParallelizeRange, UsesOmp) {

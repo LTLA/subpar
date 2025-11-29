@@ -16,6 +16,16 @@ target_include_directories(subpar INTERFACE
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/ltla_subpar>"
 )
 
+# Dependencies
+option(SUBPAR_FETCH_EXTERN "Automatically fetch subpar's external dependencies." ON)
+if(SUBPAR_FETCH_EXTERN)
+    add_subdirectory(extern)
+else()
+    find_package(ltla_sanisizer 0.1.0 CONFIG REQUIRED)
+endif()
+
+target_link_libraries(subpar INTERFACE ltla::sanisizer)
+
 # Building the test-related machinery, if we are compiling this library directly.
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     option(SUBPAR_TESTS "Build subpar's test suite." ON)
