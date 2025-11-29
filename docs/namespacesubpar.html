@@ -97,24 +97,24 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abd9eeb2cbaaf14382b926674c47b9d73" id="r_abd9eeb2cbaaf14382b926674c47b9d73"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
-<tr class="memitem:abd9eeb2cbaaf14382b926674c47b9d73"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73">parallelize_simple</a> (Task_ num_tasks, Run_ run_task)</td></tr>
-<tr class="memdesc:abd9eeb2cbaaf14382b926674c47b9d73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize individual tasks across workers.  <br /></td></tr>
-<tr class="separator:abd9eeb2cbaaf14382b926674c47b9d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082" id="r_a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplParams" colspan="2">template&lt;typename Task_ &gt; </td></tr>
-<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a9a5cb3009789142bac13ce0e81f19082">sanitize_num_workers</a> (int num_workers, Task_ num_tasks)</td></tr>
-<tr class="memdesc:a9a5cb3009789142bac13ce0e81f19082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the number of workers to the number of tasks in <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.  <br /></td></tr>
-<tr class="separator:a9a5cb3009789142bac13ce0e81f19082"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe" id="r_a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
-<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe">parallelize_range</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
-<tr class="memdesc:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers.  <br /></td></tr>
-<tr class="separator:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab039ee0d9f8d12394d4c59bb994c98ca" id="r_ab039ee0d9f8d12394d4c59bb994c98ca"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
+<tr class="memitem:ab039ee0d9f8d12394d4c59bb994c98ca"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca">parallelize_simple</a> (const Task_ num_tasks, const Run_ run_task)</td></tr>
+<tr class="memdesc:ab039ee0d9f8d12394d4c59bb994c98ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize individual tasks across workers.  <br /></td></tr>
+<tr class="separator:ab039ee0d9f8d12394d4c59bb994c98ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f48f62226f93e5bf735ce35220bcd09" id="r_a7f48f62226f93e5bf735ce35220bcd09"><td class="memTemplParams" colspan="2">template&lt;typename Task_ &gt; </td></tr>
+<tr class="memitem:a7f48f62226f93e5bf735ce35220bcd09"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09">sanitize_num_workers</a> (const int num_workers, const Task_ num_tasks)</td></tr>
+<tr class="memdesc:a7f48f62226f93e5bf735ce35220bcd09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the number of workers to the number of tasks in <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.  <br /></td></tr>
+<tr class="separator:a7f48f62226f93e5bf735ce35220bcd09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6299ecb1a7d6184a37af21dfe09cc92e" id="r_a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
+<tr class="memitem:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e">parallelize_range</a> (int num_workers, const Task_ num_tasks, const Run_ run_task_range)</td></tr>
+<tr class="memdesc:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers.  <br /></td></tr>
+<tr class="separator:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Substitutable parallelization functions. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a9c64cc17f4f8d1fadbba6d25053a8dbe" name="a9c64cc17f4f8d1fadbba6d25053a8dbe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c64cc17f4f8d1fadbba6d25053a8dbe">&#9670;&#160;</a></span>parallelize_range()</h2>
+<a id="a6299ecb1a7d6184a37af21dfe09cc92e" name="a6299ecb1a7d6184a37af21dfe09cc92e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6299ecb1a7d6184a37af21dfe09cc92e">&#9670;&#160;</a></span>parallelize_range()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -129,20 +129,20 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>, </td>
+          <td class="paramtype">const Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Run_</td>          <td class="paramname"><span class="paramname"><em>run_task_range</em></span>&#160;)</td>
+          <td class="paramtype">const Run_</td>          <td class="paramname"><span class="paramname"><em>run_task_range</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Parallelize a range of tasks across multiple workers. </p>
 <p>The aim is to split tasks in <code>[0, num_tasks)</code> into non-overlapping contiguous ranges that are executed by different workers. In the default parallelization scheme, we create <code>num_workers</code> evenly-sized ranges that are executed via OpenMP (if available) or <code>&lt;thread&gt;</code> (otherwise). Not all workers may be used, e.g., if <code>num_tasks &lt; num_workers</code>, but each worker will process no more than one range.</p>
-<p>The <code>SUBPAR_USES_OPENMP_RANGE</code> macro will be defined as 1 if and only if OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP_RANGE</code> macro to force <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
-<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> before including the <b>subpar</b> header. This should be a function-like macro that accepts the same arguments as <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> or the name of a function that accepts the same arguments as <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>. If defined, the custom scheme will be used instead of the default scheme whenever <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> is called. Macro authors should note the expectations on <code>run_task_range()</code>, as well as the one-to-zero-or-one mapping between workers and ranges.</p>
+<p>The <code>SUBPAR_USES_OPENMP_RANGE</code> macro will be defined as 1 if and only if OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP_RANGE</code> macro to force <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
+<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> before including the <b>subpar</b> header. This should be a function-like macro that accepts the same arguments as <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> or the name of a function that accepts the same arguments as <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>. If defined, the custom scheme will be used instead of the default scheme whenever <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> is called. Macro authors should note the expectations on <code>run_task_range()</code>, as well as the one-to-zero-or-one mapping between workers and ranges.</p>
 <p>If <code>nothrow_ = true</code>, exception handling is omitted from the default parallelization scheme. This avoids some unnecessary work when the caller knows that <code>run_task_range()</code> will never throw. For custom schemes, if <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> is defined, it will be used if <code>nothrow_ = true</code>; otherwise, <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> will continue to be used.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -159,7 +159,7 @@ Any return value is ignored.</td></tr>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">num_workers</td><td>Number of workers. This should be a positive integer. Any zero or negative values are treated as 1. (See also <code><a class="el" href="#a9a5cb3009789142bac13ce0e81f19082" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code>.) </td></tr>
+    <tr><td class="paramname">num_workers</td><td>Number of workers. This should be a positive integer. Any zero or negative values are treated as 1. (See also <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code>.) </td></tr>
     <tr><td class="paramname">num_tasks</td><td>Number of tasks. This should be a non-negative integer. </td></tr>
     <tr><td class="paramname">run_task_range</td><td>Function to iterate over a range of tasks within a worker. This may be called zero, one or multiple times in any particular worker. In each call:<ul>
 <li><code>w</code> is guaranteed to be in <code>[0, num_workers)</code>.</li>
@@ -172,8 +172,8 @@ This function may throw an exception if <code>nothrow_ = false</code>. </td></tr
 
 </div>
 </div>
-<a id="abd9eeb2cbaaf14382b926674c47b9d73" name="abd9eeb2cbaaf14382b926674c47b9d73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd9eeb2cbaaf14382b926674c47b9d73">&#9670;&#160;</a></span>parallelize_simple()</h2>
+<a id="ab039ee0d9f8d12394d4c59bb994c98ca" name="ab039ee0d9f8d12394d4c59bb994c98ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab039ee0d9f8d12394d4c59bb994c98ca">&#9670;&#160;</a></span>parallelize_simple()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -183,20 +183,20 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
         <tr>
           <td class="memname">void subpar::parallelize_simple </td>
           <td>(</td>
-          <td class="paramtype">Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>, </td>
+          <td class="paramtype">const Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Run_</td>          <td class="paramname"><span class="paramname"><em>run_task</em></span>&#160;)</td>
+          <td class="paramtype">const Run_</td>          <td class="paramname"><span class="paramname"><em>run_task</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Parallelize individual tasks across workers. </p>
-<p>The aim is to parallelize the execution of tasks across workers, under the assumption that there is a 1:1 mapping between them. This is most relevant when the overall computation has already been split up and assigned to workers outside of <b>subpar</b>. In such cases, <code><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> is more suitable than <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as it avoids the unnecessary overhead of partitioning the task interval.</p>
-<p>The <code>SUBPAR_USES_OPENMP_SIMPLE</code> macro will be defined as 1 if and only if OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP_SIMPLE</code> macro to force <code><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
-<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> before including the <b>subpar</b> header. This should be a function-like macro that accepts the same arguments as <code><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> or the name of a function that accepts the same arguments as <code><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code>. If defined, the custom scheme will be used instead of the default scheme whenever <code><a class="el" href="#abd9eeb2cbaaf14382b926674c47b9d73" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> is called. Macro authors should note the expectations on <code>run_task()</code>.</p>
+<p>The aim is to parallelize the execution of tasks across workers, under the assumption that there is a 1:1 mapping between them. This is most relevant when the overall computation has already been split up and assigned to workers outside of <b>subpar</b>. In such cases, <code><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> is more suitable than <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as it avoids the unnecessary overhead of partitioning the task interval.</p>
+<p>The <code>SUBPAR_USES_OPENMP_SIMPLE</code> macro will be defined as 1 if and only if OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP_SIMPLE</code> macro to force <code><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
+<p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> before including the <b>subpar</b> header. This should be a function-like macro that accepts the same arguments as <code><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> or the name of a function that accepts the same arguments as <code><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code>. If defined, the custom scheme will be used instead of the default scheme whenever <code><a class="el" href="#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">parallelize_simple()</a></code> is called. Macro authors should note the expectations on <code>run_task()</code>.</p>
 <p>If <code>nothrow_ = true</code>, exception handling is omitted from the default parallelization scheme. This avoids some unnecessary work when the caller knows that <code>run_task()</code> will never throw. For custom schemes, if <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW</code> is defined, it will be used if <code>nothrow_ = true</code>; otherwise, <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> will continue to be used.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -216,8 +216,8 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
 
 </div>
 </div>
-<a id="a9a5cb3009789142bac13ce0e81f19082" name="a9a5cb3009789142bac13ce0e81f19082"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a5cb3009789142bac13ce0e81f19082">&#9670;&#160;</a></span>sanitize_num_workers()</h2>
+<a id="a7f48f62226f93e5bf735ce35220bcd09" name="a7f48f62226f93e5bf735ce35220bcd09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f48f62226f93e5bf735ce35220bcd09">&#9670;&#160;</a></span>sanitize_num_workers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,18 +227,18 @@ template&lt;typename Task_ &gt; </div>
         <tr>
           <td class="memname">int subpar::sanitize_num_workers </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>num_workers</em></span>, </td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>num_workers</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>&#160;)</td>
+          <td class="paramtype">const Task_</td>          <td class="paramname"><span class="paramname"><em>num_tasks</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adjust the number of workers to the number of tasks in <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>. </p>
-<p>It is not strictly necessary to run <code><a class="el" href="#a9a5cb3009789142bac13ce0e81f19082" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> prior to <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as the latter will automatically behave correctly with all inputs. However, on occasion, applications need a better upper bound on the number of workers, e.g., to pre-allocate expensive per-worker data structures. In such cases, the return value of <code><a class="el" href="#a9a5cb3009789142bac13ce0e81f19082" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> can be used by the application before being passed to <code><a class="el" href="#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.</p>
+<p>Adjust the number of workers to the number of tasks in <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>. </p>
+<p>It is not strictly necessary to run <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> prior to <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as the latter will automatically behave correctly with all inputs. However, on occasion, applications need a better upper bound on the number of workers, e.g., to pre-allocate expensive per-worker data structures. In such cases, the return value of <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> can be used by the application before being passed to <code><a class="el" href="#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Task_</td><td>Integer type for the number of tasks.</td></tr>

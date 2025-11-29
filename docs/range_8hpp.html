@@ -104,6 +104,7 @@ $(function(){ initResizable(false); });
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
+<code>#include &quot;sanisizer/sanisizer.hpp&quot;</code><br />
 </div>
 <p><a href="range_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -115,14 +116,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082" id="r_a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplParams" colspan="2">template&lt;typename Task_ &gt; </td></tr>
-<tr class="memitem:a9a5cb3009789142bac13ce0e81f19082"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a9a5cb3009789142bac13ce0e81f19082">subpar::sanitize_num_workers</a> (int num_workers, Task_ num_tasks)</td></tr>
-<tr class="memdesc:a9a5cb3009789142bac13ce0e81f19082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the number of workers to the number of tasks in <code><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.  <br /></td></tr>
-<tr class="separator:a9a5cb3009789142bac13ce0e81f19082"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe" id="r_a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
-<tr class="memitem:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a9c64cc17f4f8d1fadbba6d25053a8dbe">subpar::parallelize_range</a> (int num_workers, Task_ num_tasks, Run_ run_task_range)</td></tr>
-<tr class="memdesc:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers.  <br /></td></tr>
-<tr class="separator:a9c64cc17f4f8d1fadbba6d25053a8dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f48f62226f93e5bf735ce35220bcd09" id="r_a7f48f62226f93e5bf735ce35220bcd09"><td class="memTemplParams" colspan="2">template&lt;typename Task_ &gt; </td></tr>
+<tr class="memitem:a7f48f62226f93e5bf735ce35220bcd09"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a7f48f62226f93e5bf735ce35220bcd09">subpar::sanitize_num_workers</a> (const int num_workers, const Task_ num_tasks)</td></tr>
+<tr class="memdesc:a7f48f62226f93e5bf735ce35220bcd09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjust the number of workers to the number of tasks in <code><a class="el" href="namespacesubpar.html#a6299ecb1a7d6184a37af21dfe09cc92e" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.  <br /></td></tr>
+<tr class="separator:a7f48f62226f93e5bf735ce35220bcd09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6299ecb1a7d6184a37af21dfe09cc92e" id="r_a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memTemplParams" colspan="2">template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </td></tr>
+<tr class="memitem:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacesubpar.html#a6299ecb1a7d6184a37af21dfe09cc92e">subpar::parallelize_range</a> (int num_workers, const Task_ num_tasks, const Run_ run_task_range)</td></tr>
+<tr class="memdesc:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize a range of tasks across multiple workers.  <br /></td></tr>
+<tr class="separator:a6299ecb1a7d6184a37af21dfe09cc92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Parallelize across a range of tasks. </p>

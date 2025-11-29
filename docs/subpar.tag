@@ -28,22 +28,22 @@
       <type>void</type>
       <name>parallelize_simple</name>
       <anchorfile>namespacesubpar.html</anchorfile>
-      <anchor>abd9eeb2cbaaf14382b926674c47b9d73</anchor>
-      <arglist>(Task_ num_tasks, Run_ run_task)</arglist>
+      <anchor>ab039ee0d9f8d12394d4c59bb994c98ca</anchor>
+      <arglist>(const Task_ num_tasks, const Run_ run_task)</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>sanitize_num_workers</name>
       <anchorfile>namespacesubpar.html</anchorfile>
-      <anchor>a9a5cb3009789142bac13ce0e81f19082</anchor>
-      <arglist>(int num_workers, Task_ num_tasks)</arglist>
+      <anchor>a7f48f62226f93e5bf735ce35220bcd09</anchor>
+      <arglist>(const int num_workers, const Task_ num_tasks)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>parallelize_range</name>
       <anchorfile>namespacesubpar.html</anchorfile>
-      <anchor>a9c64cc17f4f8d1fadbba6d25053a8dbe</anchor>
-      <arglist>(int num_workers, Task_ num_tasks, Run_ run_task_range)</arglist>
+      <anchor>a6299ecb1a7d6184a37af21dfe09cc92e</anchor>
+      <arglist>(int num_workers, const Task_ num_tasks, const Run_ run_task_range)</arglist>
     </member>
   </compound>
   <compound kind="page">
