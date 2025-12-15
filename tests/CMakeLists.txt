@@ -30,6 +30,7 @@ macro(decorate_executable target)
     )
 
     target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_definitions(${target} PRIVATE SUBPAR_STRICT_SIGNATURES=1)
 
     if(DO_CODE_COVERAGE)
         target_compile_options(${target} PRIVATE -O0 -g --coverage)
