@@ -165,7 +165,7 @@ void parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_ta
 
     Task_ start = 0;
     std::vector<std::thread> workers;
-    workers.reserve(sanisizer::cast<decltype(workers.size())>(num_workers)); // preallocate to ensure we don't get alloc errors during emplace_back().
+    workers.reserve(sanisizer::as_size_type<decltype(workers)>(num_workers)); // preallocate to ensure we don't get alloc errors during emplace_back().
 
     for (int w = 0; w < num_workers; ++w) {
         const Task_ length = tasks_per_worker + (w < remainder); 

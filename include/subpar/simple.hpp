@@ -102,7 +102,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 #undef SUBPAR_USES_OPENMP_SIMPLE
 
     std::vector<std::thread> workers;
-    workers.reserve(sanisizer::cast<decltype(workers.size())>(num_tasks)); // make sure we don't get alloc errors during emplace_back().
+    workers.reserve(sanisizer::as_size_type<decltype(workers)>(num_tasks)); // make sure we don't get alloc errors during emplace_back().
 
     for (Task_ w = 0; w < num_tasks; ++w) {
         if constexpr(nothrow_) {
