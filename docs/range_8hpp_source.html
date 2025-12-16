@@ -192,7 +192,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    Task_ start = 0;</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    std::vector&lt;std::thread&gt; workers;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    workers.reserve(sanisizer::cast&lt;<span class="keyword">decltype</span>(workers.size())&gt;(num_workers)); <span class="comment">// preallocate to ensure we don&#39;t get alloc errors during emplace_back().</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    workers.reserve(sanisizer::as_size_type&lt;<span class="keyword">decltype</span>(workers)&gt;(num_workers)); <span class="comment">// preallocate to ensure we don&#39;t get alloc errors during emplace_back().</span></div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> w = 0; w &lt; num_workers; ++w) {</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keyword">const</span> Task_ length = tasks_per_worker + (w &lt; remainder); </div>

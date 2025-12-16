@@ -161,7 +161,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">#undef SUBPAR_USES_OPENMP_SIMPLE</span></div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    std::vector&lt;std::thread&gt; workers;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    workers.reserve(sanisizer::cast&lt;<span class="keyword">decltype</span>(workers.size())&gt;(num_tasks)); <span class="comment">// make sure we don&#39;t get alloc errors during emplace_back().</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    workers.reserve(sanisizer::as_size_type&lt;<span class="keyword">decltype</span>(workers)&gt;(num_tasks)); <span class="comment">// make sure we don&#39;t get alloc errors during emplace_back().</span></div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordflow">for</span> (Task_ w = 0; w &lt; num_tasks; ++w) {</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(nothrow_) {</div>
