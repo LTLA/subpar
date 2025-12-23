@@ -122,7 +122,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    }</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">if</span> (num_tasks == 0) {</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">if</span> (num_tasks &lt;= 0) {</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (num_tasks == 1) {</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        run_task(0);</div>
@@ -134,7 +134,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(nothrow_) {</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <span class="keywordflow">return</span> sanisizer::create&lt;std::vector&lt;std::exception_ptr&gt; &gt;(num_tasks);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <span class="keywordflow">return</span> sanisizer::create&lt;std::vector&lt;std::exception_ptr&gt; &gt;(sanisizer::attest_gez(num_tasks));</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        }</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    }();</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
@@ -142,7 +142,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#define SUBPAR_USES_OPENMP_SIMPLE 1</span></div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// OpenMP doesn&#39;t guarantee that we&#39;ll actually start &#39;num_tasks&#39; workers,</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="comment">// so we need to do a loop here to ensure that each task simple is executed.</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="comment">// so we need to do a loop here to ensure that each task is executed.</span></div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="preprocessor">    #pragma omp parallel for num_threads(num_tasks)</span></div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordflow">for</span> (Task_ w = 0; w &lt; num_tasks; ++w) {</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(nothrow_) {</div>
@@ -161,7 +161,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">#undef SUBPAR_USES_OPENMP_SIMPLE</span></div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    std::vector&lt;std::thread&gt; workers;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    workers.reserve(sanisizer::as_size_type&lt;<span class="keyword">decltype</span>(workers)&gt;(num_tasks)); <span class="comment">// make sure we don&#39;t get alloc errors during emplace_back().</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    workers.reserve(sanisizer::as_size_type&lt;<span class="keyword">decltype</span>(workers)&gt;(sanisizer::attest_gez(num_tasks))); <span class="comment">// make sure we don&#39;t get alloc errors during emplace_back().</span></div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordflow">for</span> (Task_ w = 0; w &lt; num_tasks; ++w) {</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordflow">if</span> <span class="keyword">constexpr</span>(nothrow_) {</div>
