@@ -208,15 +208,6 @@ template<typename Task_, class Run_>
 void parallelize(int num_workers, Task_ num_tasks, Run_ run_task_range) {
     parallelize_range<false, Task_, Run_>(num_workers, num_tasks, std::move(run_task_range));
 }
-
-#ifdef SUBPAR_STRICT_SIGNATURES
-// Delete all other overloads to force users to supply the correct types.
-template<typename ... Args_>
-void sanitize_num_workers(Args_...) = delete;
-
-template<bool nothrow_ = false, typename ... Args_>
-void parallelize_range(Args_...) = delete;
-#endif
 /**
  * @endcond
  */
