@@ -63,7 +63,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
     }
 
 #else
-    if (num_tasks == 0) {
+    if (num_tasks <= 0) {
         return;
     } else if (num_tasks == 1) {
         run_task(0);
@@ -75,7 +75,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
         if constexpr(nothrow_) {
             return true;
         } else {
-            return sanisizer::create<std::vector<std::exception_ptr> >(num_tasks);
+            return sanisizer::create<std::vector<std::exception_ptr> >(sanisizer::attest_gez(num_tasks));
         }
     }();
 
@@ -83,7 +83,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 #define SUBPAR_USES_OPENMP_SIMPLE 1
 
     // OpenMP doesn't guarantee that we'll actually start 'num_tasks' workers,
-    // so we need to do a loop here to ensure that each task simple is executed.
+    // so we need to do a loop here to ensure that each task is executed.
     #pragma omp parallel for num_threads(num_tasks)
     for (Task_ w = 0; w < num_tasks; ++w) {
         if constexpr(nothrow_) {
@@ -102,7 +102,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 #undef SUBPAR_USES_OPENMP_SIMPLE
 
     std::vector<std::thread> workers;
-    workers.reserve(sanisizer::as_size_type<decltype(workers)>(num_tasks)); // make sure we don't get alloc errors during emplace_back().
+    workers.reserve(sanisizer::as_size_type<decltype(workers)>(sanisizer::attest_gez(num_tasks))); // make sure we don't get alloc errors during emplace_back().
 
     for (Task_ w = 0; w < num_tasks; ++w) {
         if constexpr(nothrow_) {
