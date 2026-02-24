@@ -24,7 +24,7 @@ namespace subpar {
  *
  * It is not strictly necessary to run `sanitize_num_workers()` prior to `parallelize_range()` as the latter will automatically behave correctly with all inputs.
  * However, on occasion, applications need a better upper bound on the number of workers, e.g., to pre-allocate expensive per-worker data structures.
- * In such cases, the return value of `sanitize_num_workers()` can be used by the application before being passed to `parallelize_range()`.
+ * This upper bound can be obtained by `sanitize_num_workers()` to refine the number of workers prior to calling `parallelize_range()`.
  *
  * @tparam Task_ Integer type for the number of tasks.
  *
@@ -33,23 +33,30 @@ namespace subpar {
  * @param num_tasks Number of tasks.
  * This should be a non-negative integer.
  *
- * @return A more suitable number of workers.
- * Negative or zero `num_workers` are converted to 1 if `num_tasks > 0`, otherwise zero.
- * If `num_workers` is greater than `num_tasks`, the former is set to the latter.
+ * @return A more suitable number of workers, possibly zero.
+ * The return value of `sanitize_num_workers()` will be an upper bound to the return value of `parallelize_range()` with the same `num_workers` and `num_tasks`.
  */
 template<typename Task_>
 int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
-    if (num_workers <= 0) {
-        return num_tasks > 0;
-    } else {
-        return sanisizer::min(num_workers, num_tasks);
+    // This code mirrors the return logic in the default parallelize_range(), but would be an upper bound even with a custom SUBPAR_CUSTOM_PARALLELIZE_RANGE.
+    // Remember that run_task_range must be called with a non-empty range so if num_tasks = 0, there is no choice but to not perform any calls.
+    // Similarly, we can't perform more than one call if num_tasks = 1, and we can't perform more calls than there are workers.
+
+    if (num_tasks <= 0) {
+        return 0;
     }
+
+    if (num_workers <= 1 || num_tasks == 1) {
+        return 1;
+    }
+
+    return sanisizer::min(num_workers, num_tasks);
 }
 
 /**
  * @brief Parallelize a range of tasks across multiple workers.
  *
- * The aim is to split tasks in `[0, num_tasks)` into non-overlapping contiguous ranges that are executed by different workers.
+ * The aim is to split tasks in `[0, num_tasks)` into non-overlapping non-empty contiguous ranges that are executed by different workers.
  * In the default parallelization scheme, we create `num_workers` evenly-sized ranges that are executed via OpenMP (if available) or `<thread>` (otherwise).
  * Not all workers may be used, e.g., if `num_tasks < num_workers`, but each worker will process no more than one range.
  * 
@@ -71,11 +78,11 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts three arguments:
  * - `w`, the identity of the worker executing this task range.
- *   This will be passed as an `int`.
+ *   This will be passed as an `int` in `[0, num_workers)`.
  * - `start`, the start index of the task range.
- *   This will be passed as a `Task_`.
+ *   This will be passed as a `Task_` in `[0, num_tasks)`.
  * - `length`, the number of tasks in the task range.
- *   This will be passed as a `Task_`.
+ *   This will be passed as a `Task_` in `(0, num_tasks)`, i.e., it is guaranteed to be positive.
  * .
  * Any return value is ignored.
  *
@@ -96,7 +103,7 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
  * This function may throw an exception if `nothrow_ = false`.
  *
  * @return The number of workers (`K`) that were actually used. 
- * This is guaranteed to be no greater than `num_workers`.
+ * This is guaranteed to be no greater than `num_workers` (or 1, if `num_workers` is not positive).
  * It can also be assumed that `run_task_range` was called once for each of `[0, 1, ..., K-1]`.
  */
 template<bool nothrow_ = false, typename Task_, class Run_>
