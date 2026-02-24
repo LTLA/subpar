@@ -39,10 +39,10 @@
       <arglist>(const int num_workers, const Task_ num_tasks)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
+      <type>int</type>
       <name>parallelize_range</name>
       <anchorfile>namespacesubpar.html</anchorfile>
-      <anchor>a6299ecb1a7d6184a37af21dfe09cc92e</anchor>
+      <anchor>aa2ea2594f895ea5837bd3df8ad31af14</anchor>
       <arglist>(int num_workers, const Task_ num_tasks, const Run_ run_task_range)</arglist>
     </member>
   </compound>
