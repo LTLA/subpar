@@ -132,6 +132,15 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
         remainder = num_tasks % num_workers;
     }
 
+    const auto get_start = [&tasks_per_worker,&remainder](const int w) -> Task_ {
+        // Need to shift the start by the number of previous 'w' that added a remainder.
+        return w * tasks_per_worker + (w < remainder ? w : remainder);
+    };
+
+    const auto get_length = [&tasks_per_worker,&remainder](const int w) -> Task_ {
+        return tasks_per_worker + (w < remainder); 
+    };
+
     // Avoid instantiating a vector if it is known that the function can't throw.
     auto errors = [&]{
         if constexpr(nothrow_) {
@@ -149,8 +158,8 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
     // so we need to do a loop here to ensure that each task range is executed.
     #pragma omp parallel for num_threads(num_workers)
     for (int w = 0; w < num_workers; ++w) {
-        const Task_ start = w * tasks_per_worker + (w < remainder ? w : remainder); // need to shift the start by the number of previous 'w' that added a remainder.
-        const Task_ length = tasks_per_worker + (w < remainder);
+        const Task_ start = get_start(w);
+        const Task_ length = get_length(w);
 
         if constexpr(nothrow_) {
             run_task_range(w, start, length);
@@ -168,12 +177,13 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
 #undef SUBPAR_USES_OPENMP
 #undef SUBPAR_USES_OPENMP_RANGE
 
-    Task_ start = 0;
+    // We run the first job on the current thread, to avoid having to spin up an unnecessary worker.
     std::vector<std::thread> workers;
-    sanisizer::reserve(workers, num_workers); // preallocate to ensure we don't get alloc errors during emplace_back().
+    sanisizer::reserve(workers, num_workers - 1); // preallocate to ensure we don't get alloc errors during emplace_back().
 
-    for (int w = 0; w < num_workers; ++w) {
-        const Task_ length = tasks_per_worker + (w < remainder); 
+    for (int w = 1; w < num_workers; ++w) {
+        const Task_ start = get_start(w);
+        const Task_ length = get_length(w);
 
         if constexpr(nothrow_) {
             workers.emplace_back(run_task_range, w, start, length);
@@ -186,8 +196,21 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
                 }
             }, w, start, length);
         }
+    }
 
-        start += length;
+    {
+        const Task_ start = get_start(0);
+        const Task_ length = get_length(0);
+
+        if constexpr(nothrow_) {
+            run_task_range(0, start, length);
+        } else {
+            try {
+                run_task_range(0, start, length);
+            } catch (...) {
+                errors[0] = std::current_exception();
+            }
+        }
     }
 
     for (auto& wrk : workers) {

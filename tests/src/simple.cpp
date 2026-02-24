@@ -46,18 +46,23 @@ TEST(ParallelizeSimple, Basic) {
 }
 
 TEST(ParallelizeSimple, Errors) {
-    EXPECT_ANY_THROW({
-        try {
-            subpar::parallelize_simple(2, [&](int) -> void {
-                throw std::runtime_error("WHEE");
-            });
-        } catch (std::exception& e) {
-            EXPECT_TRUE(std::string(e.what()).find("WHEE") != std::string::npos);
-            throw;
-        } catch (...) {
-            // don't do anything, it shouldn't get here.
-        }
-    });
+    // Check that we can catch errors both in the workers and in the main thread.
+    for (int error_thread = 0; error_thread < 2; ++error_thread) {
+        EXPECT_ANY_THROW({
+            try {
+                subpar::parallelize_simple(2, [&](int w) -> void {
+                    if (w == error_thread) {
+                        throw std::runtime_error("WHEE");
+                    }
+                });
+            } catch (std::exception& e) {
+                EXPECT_TRUE(std::string(e.what()).find("WHEE") != std::string::npos);
+                throw;
+            } catch (...) {
+                // don't do anything, it shouldn't get here.
+            }
+        });
+    }
 
     EXPECT_ANY_THROW({
         subpar::parallelize_simple(2, [&](int) -> void {

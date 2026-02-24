@@ -101,10 +101,11 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 // Wiping it out, just in case.
 #undef SUBPAR_USES_OPENMP_SIMPLE
 
+    // We run the first job on the current thread, to avoid having to spin up an unnecessary worker.
     std::vector<std::thread> workers;
-    sanisizer::reserve(workers, num_tasks); // make sure we don't get alloc errors during emplace_back().
+    sanisizer::reserve(workers, num_tasks - 1); // make sure we don't get alloc errors during emplace_back().
 
-    for (Task_ w = 0; w < num_tasks; ++w) {
+    for (Task_ w = 1; w < num_tasks; ++w) {
         if constexpr(nothrow_) {
             workers.emplace_back(run_task, w);
         } else {
@@ -115,6 +116,18 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
                     errors[w] = std::current_exception();
                 }
             }, w);
+        }
+    }
+
+    {
+        if constexpr(nothrow_) {
+            run_task(0);
+        } else {
+            try {
+                run_task(0);
+            } catch (...) {
+                errors[0] = std::current_exception();
+            }
         }
     }
 
