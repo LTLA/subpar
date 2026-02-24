@@ -42,7 +42,7 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
     if (num_workers <= 0) {
         return num_tasks > 0;
     } else {
-        return sanisizer::min(sanisizer::attest_gez(num_workers), num_tasks);
+        return sanisizer::min(num_workers, num_tasks);
     }
 }
 
@@ -125,7 +125,7 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
     // All workers with indices below 'remainder' get an extra task to fill up the remainder.
     Task_ tasks_per_worker = 1;
     int remainder = 0;
-    if (sanisizer::is_greater_than_or_equal(sanisizer::attest_gez(num_workers), sanisizer::attest_gez(num_tasks))) {
+    if (sanisizer::is_greater_than_or_equal(num_workers, num_tasks)) {
         num_workers = num_tasks;
     } else {
         tasks_per_worker = num_tasks / num_workers;
@@ -137,7 +137,7 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
         if constexpr(nothrow_) {
             return true;
         } else {
-            return sanisizer::create<std::vector<std::exception_ptr> >(sanisizer::attest_gez(num_workers));
+            return sanisizer::create<std::vector<std::exception_ptr> >(num_workers);
         }
     }();
 
@@ -170,7 +170,7 @@ int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_tas
 
     Task_ start = 0;
     std::vector<std::thread> workers;
-    workers.reserve(sanisizer::as_size_type<decltype(workers)>(sanisizer::attest_gez(num_workers))); // preallocate to ensure we don't get alloc errors during emplace_back().
+    sanisizer::reserve(workers, num_workers); // preallocate to ensure we don't get alloc errors during emplace_back().
 
     for (int w = 0; w < num_workers; ++w) {
         const Task_ length = tasks_per_worker + (w < remainder); 

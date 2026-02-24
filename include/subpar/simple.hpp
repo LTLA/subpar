@@ -75,7 +75,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
         if constexpr(nothrow_) {
             return true;
         } else {
-            return sanisizer::create<std::vector<std::exception_ptr> >(sanisizer::attest_gez(num_tasks));
+            return sanisizer::create<std::vector<std::exception_ptr> >(num_tasks);
         }
     }();
 
@@ -102,7 +102,7 @@ void parallelize_simple(const Task_ num_tasks, const Run_ run_task) {
 #undef SUBPAR_USES_OPENMP_SIMPLE
 
     std::vector<std::thread> workers;
-    workers.reserve(sanisizer::as_size_type<decltype(workers)>(sanisizer::attest_gez(num_tasks))); // make sure we don't get alloc errors during emplace_back().
+    sanisizer::reserve(workers, num_tasks); // make sure we don't get alloc errors during emplace_back().
 
     for (Task_ w = 0; w < num_tasks; ++w) {
         if constexpr(nothrow_) {
