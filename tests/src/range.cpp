@@ -7,9 +7,9 @@
 
 #ifdef CUSTOM_PARALLEL_TEST
 template<typename Task_, typename Run_>
-void stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
+int stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
     if (num_threads == 0) {
-        return;
+        return 0;
     }
 
     std::vector<Task_> allocations(num_threads);
@@ -18,12 +18,16 @@ void stupid_parallel(int num_threads, Task_ num_tasks, Run_ run) {
     }
 
     Task_ start = 0; 
+    int used = 0;
     for (int t = 0; t < num_threads; ++t) {
         if (allocations[t]) {
             run(t, start, allocations[t]);
             start += allocations[t];
+            ++used; 
         }
     }
+
+    return used;
 }
 
 #define SUBPAR_CUSTOM_PARALLELIZE_RANGE stupid_parallel
@@ -93,7 +97,8 @@ TEST(ParallelizeRange, ExactPartition) {
     for (auto tn : thread_counts) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
-        subpar::parallelize_range(
+
+        auto used = subpar::parallelize_range(
             static_cast<int>(ranges.size()),
             assignments.size(),
             [&](int t, int start, int len) {
@@ -102,6 +107,7 @@ TEST(ParallelizeRange, ExactPartition) {
                 std::fill_n(assignments.begin() + start, len, t);
             }
         );
+        EXPECT_EQ(used, tn);
 
         auto tabled = tabulate(assignments);
         std::vector<int> exact(tn, assignments.size() / tn);
@@ -117,7 +123,7 @@ TEST(ParallelizeRange, InexactPartition) {
         std::vector<int> assignments(1000, /* dummy value */ 255);
         std::vector<std::pair<int, int> > ranges(tn);
 
-        subpar::parallelize_range(
+        auto used = subpar::parallelize_range(
             tn,
             assignments.size(),
             [&](int t, int start, int len) {
@@ -126,6 +132,7 @@ TEST(ParallelizeRange, InexactPartition) {
                 std::fill_n(assignments.begin() + start, len, t);
             }
         );
+        EXPECT_EQ(used, tn);
 
         auto tabled = tabulate(assignments);
         EXPECT_EQ(tabled.size(), tn);
@@ -140,7 +147,7 @@ TEST(ParallelizeRange, Overprovision) {
     std::vector<int> assignments(5, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(7);
 
-    subpar::parallelize_range(
+    auto used = subpar::parallelize_range(
         static_cast<int>(ranges.size()),
         assignments.size(),
         [&](int t, int start, int len) {
@@ -149,6 +156,7 @@ TEST(ParallelizeRange, Overprovision) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, assignments.size());
 
     auto tabled = tabulate(assignments);
     std::vector<int> expected(assignments.size(), 1);
@@ -165,7 +173,7 @@ TEST(ParallelizeRange, OneThread) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(1);
 
-    subpar::parallelize_range(
+    auto used = subpar::parallelize_range(
         static_cast<int>(ranges.size()),
         assignments.size(),
         [&](int t, int start, int len) {
@@ -174,6 +182,7 @@ TEST(ParallelizeRange, OneThread) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, 1);
 
     auto tabled = tabulate(assignments);
     EXPECT_EQ(tabled.size(), 1);
@@ -183,26 +192,30 @@ TEST(ParallelizeRange, OneThread) {
 
 TEST(ParallelizeRange, OneTask) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize_range(
+
+    auto used = subpar::parallelize_range(
         /* nthreads = */ 10,
         /* ntask = */ 1,
         [&](int t, int start, int len) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, 1);
 
     EXPECT_EQ(assignments.front(), 0);
 }
 
 TEST(ParallelizeRange, NoTasks) {
     std::vector<int> assignments(1000, /* dummy value */ 255);
-    subpar::parallelize_range(  
+
+    auto used = subpar::parallelize_range(  
         /* nthreads = */ 10,
         /* ntasks = */ 0,
         [&](int t, int start, int len) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, 0);
 
     EXPECT_EQ(assignments.front(), 255);
     EXPECT_EQ(assignments.back(), 255);
@@ -213,7 +226,8 @@ TEST(ParallelizeRange, SmallIntegers) {
     uint8_t njobs = -1;
     std::vector<int> assignments(njobs, /* dummy value */ 255);
     std::vector<std::pair<int, int> > ranges(10);
-    subpar::parallelize_range(
+
+    auto used = subpar::parallelize_range(
         /* nthreads = */ 10,
         njobs,
         [&](int t, uint8_t start, uint8_t len) {
@@ -222,6 +236,7 @@ TEST(ParallelizeRange, SmallIntegers) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, ranges.size());
 
     auto tabled = tabulate(assignments);
     EXPECT_EQ(tabled.size(), ranges.size());
@@ -265,7 +280,7 @@ TEST(ParallelizeRange, Nothrow) {
     int tn = 5;
 
     std::vector<std::pair<int, int> > ranges(tn);
-    subpar::parallelize_range<true>(
+    auto used = subpar::parallelize_range<true>(
         static_cast<int>(ranges.size()), 
         assignments.size(),
         [&](int t, int start, int len) {
@@ -274,6 +289,7 @@ TEST(ParallelizeRange, Nothrow) {
             std::fill_n(assignments.begin() + start, len, t);
         }
     );
+    EXPECT_EQ(used, tn);
 
     auto tabled = tabulate(assignments);
     std::vector<int> exact(tn, assignments.size() / tn);

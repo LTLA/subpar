@@ -82,6 +82,42 @@ These will be used in place of their non-`NOTHROW` counterparts in the `nothrow_
 providing an optimization opportunity for custom parallelization schemes when exception handling is not required.
 Note that the non-`NOTHROW` macros still need to be defined before the `NOTHROW` macros can be used, even if all calls to **subpar** functions use `nothrow_ = true`.
 
+## Checking the number of workers
+
+Technically, `parallelize_range()` might not use all available workers.
+For example, when the number of tasks is less than the number of workers, only the required number of workers will be used.
+Other applications might have more complex scheduling logic, e.g., a custom `SUBPAR_PARALLELIZE_RANGE` restricting calls to only use performance cores.
+Callers can check the return value of `parallelize_range()` to determine the number of workers that were actually used:
+
+```cpp
+#include "subpar/subpar.hpp"
+
+int num_workers = 10;
+std::vector<double> results(num_workers, -1);
+
+auto num_used = subpar::parallelize_range(
+    num_workers,
+    /* num_tasks = */ 5,
+    /* run = */ [&](int worker, int start, int len) {
+        // ... do some per-worker set-up ...
+        int tmp = 0;
+        for (int task = start, end = start + len; task < end; ++task) {
+            tmp += task;
+        }
+        results[worker] = tmp;
+    }
+);
+
+// Only iterate through the first 'num_used' results.
+double total = 0;
+for (int u = 0; u < num_used; ++u) {
+    double += results[u];
+}
+```
+
+This is most relevant when storing thread-specific results for retrieval outside of `parallelize_range()`.
+In such cases, only the first `num_used` results are actually populated - the remaining entries should be ignored. 
+
 ## Building projects 
 
 ### CMake with `FetchContent`

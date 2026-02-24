@@ -58,7 +58,7 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
  * This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.
  *
  * Advanced users can substitute in their own parallelization scheme by defining `SUBPAR_CUSTOM_PARALLELIZE_RANGE` before including the **subpar** header.
- * This should be a function-like macro that accepts the same arguments as `parallelize_range()` or the name of a function that accepts the same arguments as `parallelize_range()`.
+ * This should be a function-like macro or the name of a function that accepts the same arguments as `parallelize_range()` and returns an integer.
  * If defined, the custom scheme will be used instead of the default scheme whenever `parallelize_range()` is called.
  * Macro authors should note the expectations on `run_task_range()`, as well as the one-to-zero-or-one mapping between workers and ranges.
  *
@@ -86,35 +86,40 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
  * @param num_tasks Number of tasks.
  * This should be a non-negative integer.
  * @param run_task_range Function to iterate over a range of tasks within a worker.
- * This may be called zero, one or multiple times in any particular worker.
+ * This will be called no more than once in each worker.
  * In each call:
- * - `w` is guaranteed to be in `[0, num_workers)`.
+ * - `w` is guaranteed to be in `[0, K)` where `K` is the return value of `parallelize_range()`.
+ *   `K` itself is guaranteed to be no greater than `num_workers`.
  * - `[start, start + length)` is guaranteed to be a non-empty range of tasks that lies in `[0, num_tasks)`.
  *   It will not overlap with any other range in any other call to `run_task_range()`.
  * .
  * This function may throw an exception if `nothrow_ = false`.
+ *
+ * @return The number of workers (`K`) that were actually used. 
+ * This is guaranteed to be no greater than `num_workers`.
+ * It can also be assumed that `run_task_range` was called once for each of `[0, 1, ..., K-1]`.
  */
 template<bool nothrow_ = false, typename Task_, class Run_>
-void parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_task_range) {
+int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_task_range) {
 #ifdef SUBPAR_CUSTOM_PARALLELIZE_RANGE
     if constexpr(nothrow_) {
 #ifdef SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW
-        SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW(num_workers, num_tasks, run_task_range);
+        return SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW(num_workers, num_tasks, run_task_range);
 #else
-        SUBPAR_CUSTOM_PARALLELIZE_RANGE(num_workers, num_tasks, run_task_range);
+        return SUBPAR_CUSTOM_PARALLELIZE_RANGE(num_workers, num_tasks, run_task_range);
 #endif
     } else {
-        SUBPAR_CUSTOM_PARALLELIZE_RANGE(num_workers, num_tasks, run_task_range);
+        return SUBPAR_CUSTOM_PARALLELIZE_RANGE(num_workers, num_tasks, run_task_range);
     }
 
 #else
     if (num_tasks <= 0) {
-        return;
+        return 0;
     }
 
     if (num_workers <= 1 || num_tasks == 1) {
         run_task_range(0, 0, num_tasks);
-        return;
+        return 1;
     }
 
     // All workers with indices below 'remainder' get an extra task to fill up the remainder.
@@ -198,6 +203,8 @@ void parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_ta
         }
     }
 #endif
+
+    return num_workers;
 }
 
 /**
