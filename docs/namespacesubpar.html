@@ -140,7 +140,7 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
 </div><div class="memdoc">
 
 <p>Parallelize a range of tasks across multiple workers. </p>
-<p>The aim is to split tasks in <code>[0, num_tasks)</code> into non-overlapping contiguous ranges that are executed by different workers. In the default parallelization scheme, we create <code>num_workers</code> evenly-sized ranges that are executed via OpenMP (if available) or <code>&lt;thread&gt;</code> (otherwise). Not all workers may be used, e.g., if <code>num_tasks &lt; num_workers</code>, but each worker will process no more than one range.</p>
+<p>The aim is to split tasks in <code>[0, num_tasks)</code> into non-overlapping non-empty contiguous ranges that are executed by different workers. In the default parallelization scheme, we create <code>num_workers</code> evenly-sized ranges that are executed via OpenMP (if available) or <code>&lt;thread&gt;</code> (otherwise). Not all workers may be used, e.g., if <code>num_tasks &lt; num_workers</code>, but each worker will process no more than one range.</p>
 <p>The <code>SUBPAR_USES_OPENMP_RANGE</code> macro will be defined as 1 if and only if OpenMP was used in the default scheme. Users can define the <code>SUBPAR_NO_OPENMP_RANGE</code> macro to force <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> to use <code>&lt;thread&gt;</code> even if OpenMP is available. This is occasionally useful when OpenMP cannot be used in some parts of the application, e.g., with POSIX forks.</p>
 <p>Advanced users can substitute in their own parallelization scheme by defining <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> before including the <b>subpar</b> header. This should be a function-like macro or the name of a function that accepts the same arguments as <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> and returns an integer. If defined, the custom scheme will be used instead of the default scheme whenever <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> is called. Macro authors should note the expectations on <code>run_task_range()</code>, as well as the one-to-zero-or-one mapping between workers and ranges.</p>
 <p>If <code>nothrow_ = true</code>, exception handling is omitted from the default parallelization scheme. This avoids some unnecessary work when the caller knows that <code>run_task_range()</code> will never throw. For custom schemes, if <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> is defined, it will be used if <code>nothrow_ = true</code>; otherwise, <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> will continue to be used.</p>
@@ -149,9 +149,9 @@ template&lt;bool nothrow_ = false, typename Task_ , class Run_ &gt; </div>
     <tr><td class="paramname">nothrow_</td><td>Whether the <code>Run_</code> function cannot throw an exception. </td></tr>
     <tr><td class="paramname">Task_</td><td>Integer type for the number of tasks. </td></tr>
     <tr><td class="paramname">Run_</td><td>Function that accepts three arguments:<ul>
-<li><code>w</code>, the identity of the worker executing this task range. This will be passed as an <code>int</code>.</li>
-<li><code>start</code>, the start index of the task range. This will be passed as a <code>Task_</code>.</li>
-<li><code>length</code>, the number of tasks in the task range. This will be passed as a <code>Task_</code>.</li>
+<li><code>w</code>, the identity of the worker executing this task range. This will be passed as an <code>int</code> in <code>[0, num_workers)</code>.</li>
+<li><code>start</code>, the start index of the task range. This will be passed as a <code>Task_</code> in <code>[0, num_tasks)</code>.</li>
+<li><code>length</code>, the number of tasks in the task range. This will be passed as a <code>Task_</code> in <code>(0, num_tasks)</code>, i.e., it is guaranteed to be positive.</li>
 </ul>
 Any return value is ignored.</td></tr>
   </table>
@@ -169,7 +169,7 @@ This function may throw an exception if <code>nothrow_ = false</code>.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The number of workers (<code>K</code>) that were actually used. This is guaranteed to be no greater than <code>num_workers</code>. It can also be assumed that <code>run_task_range</code> was called once for each of <code>[0, 1, ..., K-1]</code>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The number of workers (<code>K</code>) that were actually used. This is guaranteed to be no greater than <code>num_workers</code> (or 1, if <code>num_workers</code> is not positive). It can also be assumed that <code>run_task_range</code> was called once for each of <code>[0, 1, ..., K-1]</code>. </dd></dl>
 
 </div>
 </div>
@@ -239,7 +239,7 @@ template&lt;typename Task_ &gt; </div>
 </div><div class="memdoc">
 
 <p>Adjust the number of workers to the number of tasks in <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>. </p>
-<p>It is not strictly necessary to run <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> prior to <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as the latter will automatically behave correctly with all inputs. However, on occasion, applications need a better upper bound on the number of workers, e.g., to pre-allocate expensive per-worker data structures. In such cases, the return value of <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> can be used by the application before being passed to <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.</p>
+<p>It is not strictly necessary to run <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> prior to <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> as the latter will automatically behave correctly with all inputs. However, on occasion, applications need a better upper bound on the number of workers, e.g., to pre-allocate expensive per-worker data structures. This upper bound can be obtained by <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> to refine the number of workers prior to calling <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Task_</td><td>Integer type for the number of tasks.</td></tr>
@@ -253,7 +253,7 @@ template&lt;typename Task_ &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A more suitable number of workers. Negative or zero <code>num_workers</code> are converted to 1 if <code>num_tasks &gt; 0</code>, otherwise zero. If <code>num_workers</code> is greater than <code>num_tasks</code>, the former is set to the latter. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A more suitable number of workers, possibly zero. The return value of <code><a class="el" href="#a7f48f62226f93e5bf735ce35220bcd09" title="Adjust the number of workers to the number of tasks in parallelize_range().">sanitize_num_workers()</a></code> will be an upper bound to the return value of <code><a class="el" href="#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">parallelize_range()</a></code> with the same <code>num_workers</code> and <code>num_tasks</code>. </dd></dl>
 
 </div>
 </div>
