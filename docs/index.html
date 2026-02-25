@@ -91,10 +91,10 @@ $(function(){ initResizable(false); });
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__2github_2workspace_2README"></a></p>
 <p><img src="https://github.com/LTLA/subpar/actions/workflows/run-tests.yaml/badge.svg" alt="Unit tests" style="pointer-events: none;" class="inline"/> <img src="https://github.com/LTLA/subpar/actions/workflows/doxygenate.yaml/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/> <a href="https://codecov.io/gh/LTLA/subpar"><img src="https://codecov.io/gh/LTLA/subpar/branch/master/graph/badge.svg?token=GByG4StuqU" alt="Codecov" style="pointer-events: none;" class="inline"/></a></p>
-<h1><a class="anchor" id="autotoc_md1"></a>
+<h1><a class="anchor" id="autotoc_md3"></a>
 Overview</h1>
 <p>This repository implements a simple <code>parallelize_range()</code> function that can be used throughout all of my C++ libaries. By default, it just splits the range of tasks into equi-sized intervals that are executed by different workers. OpenMP is used if it is available, otherwise we spin up a new <code>std::thread</code> for each interval. Advanced users can define a macro to instruct <code>parallelize_range()</code> to use their own parallelization mechanism. This allows applications to quickly substitute all instances of <code>parallelize_range()</code> across all libraries with something more appropriate.</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 Quick start</h1>
 <p>The <code><a class="el" href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> function requires the number of workers, the number of tasks, and a function that iterates over the range of tasks and executes them in a single worker.</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="subpar_8hpp.html">subpar/subpar.hpp</a>&quot;</span></div>
@@ -109,7 +109,7 @@ Quick start</h1>
 <div class="line">        }</div>
 <div class="line">    }</div>
 <div class="line">);</div>
-<div class="ttc" id="anamespacesubpar_html_aa2ea2594f895ea5837bd3df8ad31af14"><div class="ttname"><a href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14">subpar::parallelize_range</a></div><div class="ttdeci">int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:110</div></div>
+<div class="ttc" id="anamespacesubpar_html_aa2ea2594f895ea5837bd3df8ad31af14"><div class="ttname"><a href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14">subpar::parallelize_range</a></div><div class="ttdeci">int parallelize_range(int num_workers, const Task_ num_tasks, const Run_ run_task_range)</div><div class="ttdoc">Parallelize a range of tasks across multiple workers.</div><div class="ttdef"><b>Definition</b> range.hpp:126</div></div>
 <div class="ttc" id="asubpar_8hpp_html"><div class="ttname"><a href="subpar_8hpp.html">subpar.hpp</a></div><div class="ttdoc">Substitutable parallelization functions.</div></div>
 </div><!-- fragment --><p><code><a class="el" href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> functions will correctly handle exceptions thrown in the user-supplied function. This comes with some slight overhead so the user can set the <code>nothrow_</code> template parameter to <code>false</code> if they can guarantee that their supplied functions will not throw.</p>
 <p>On occasion, the user has already assigned a task to each worker outside of <b>subpar</b>. This is handled by <code><a class="el" href="namespacesubpar.html#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code>, which will execute each task in its own worker without the overhead of task range partitioning.</p>
@@ -123,7 +123,7 @@ Quick start</h1>
 <div class="line">);</div>
 <div class="ttc" id="anamespacesubpar_html_ab039ee0d9f8d12394d4c59bb994c98ca"><div class="ttname"><a href="namespacesubpar.html#ab039ee0d9f8d12394d4c59bb994c98ca">subpar::parallelize_simple</a></div><div class="ttdeci">void parallelize_simple(const Task_ num_tasks, const Run_ run_task)</div><div class="ttdoc">Parallelize individual tasks across workers.</div><div class="ttdef"><b>Definition</b> simple.hpp:53</div></div>
 </div><!-- fragment --><p>Check out the <a href="https://ltla.github.io/subpar">reference documentation</a> for more details.</p>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Custom parallelization</h1>
 <p>If the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE</code> macro is defined, it is used in place of the default behavior whenever <code><a class="el" href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code> is called. The macro should accept exactly the same arguments as <code><a class="el" href="namespacesubpar.html#aa2ea2594f895ea5837bd3df8ad31af14" title="Parallelize a range of tasks across multiple workers.">subpar::parallelize_range()</a></code>, but the macro author is now responsible for distributing tasks among workers. This can be used to inject other parallelization mechanisms like Intel's TBB, TinyThread, Boost, etc. The same approach can be applied to <code><a class="el" href="namespacesubpar.html#ab039ee0d9f8d12394d4c59bb994c98ca" title="Parallelize individual tasks across workers.">subpar::parallelize_simple()</a></code> via the <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE</code> macro.</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Task_, <span class="keyword">class</span> Run_&gt;</div>
@@ -143,7 +143,7 @@ Custom parallelization</h1>
 <div class="line"> </div>
 <div class="line"><span class="comment">// And now use the subpar functions...</span></div>
 </div><!-- fragment --><p>Users can additionally define the <code>SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW</code> or <code>SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW</code> macros. These will be used in place of their non-<code>NOTHROW</code> counterparts in the <code>nothrow_ = true</code> case, providing an optimization opportunity for custom parallelization schemes when exception handling is not required. Note that the non-<code>NOTHROW</code> macros still need to be defined before the <code>NOTHROW</code> macros can be used, even if all calls to <b>subpar</b> functions use <code>nothrow_ = true</code>.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Checking the number of workers</h1>
 <p>Technically, <code>parallelize_range()</code> might not use all available workers. For example, when the number of tasks is less than the number of workers, only the required number of workers will be used. Other applications might have more complex scheduling logic, e.g., a custom <code>SUBPAR_PARALLELIZE_RANGE</code> restricting calls to only use performance cores. Callers can check the return value of <code>parallelize_range()</code> to determine the number of workers that were actually used:</p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="subpar_8hpp.html">subpar/subpar.hpp</a>&quot;</span></div>
@@ -170,9 +170,9 @@ Checking the number of workers</h1>
 <div class="line">    <span class="keywordtype">double</span> += results[u];</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>This is most relevant when storing thread-specific results for retrieval outside of <code>parallelize_range()</code>. In such cases, only the first <code>num_used</code> results are actually populated - the remaining entries should be ignored.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Building projects</h1>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 CMake with <code>FetchContent</code></h2>
 <p>If you're using CMake, you just need to add something like this to your <code>CMakeLists.txt</code>:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
@@ -190,7 +190,7 @@ CMake with <code>FetchContent</code></h2>
 <div class="line"> </div>
 <div class="line"># For libaries</div>
 <div class="line">target_link_libraries(mylib INTERFACE subpar)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
 CMake with <code>find_package()</code></h2>
 <p>You can install the library by cloning a suitable version of this repository and running the following commands:</p>
 <div class="fragment"><div class="line">mkdir build &amp;&amp; cd build</div>
@@ -199,7 +199,7 @@ CMake with <code>find_package()</code></h2>
 </div><!-- fragment --><p>Then you can use <code>find_package()</code> as usual:</p>
 <div class="fragment"><div class="line">find_package(ltla_subpar CONFIG REQUIRED)</div>
 <div class="line">target_link_libraries(mylib INTERFACE ltla::subpar)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
 Manual</h2>
 <p>If you're not using CMake, the simple approach is to just copy the files in the <code>include/</code> subdirectory - either directly or with Git submodules - and include their path during compilation with, e.g., GCC's <code>-I</code>. </p>
 </div></div><!-- PageDoc -->
