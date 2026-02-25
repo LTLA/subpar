@@ -38,6 +38,11 @@ namespace subpar {
  * For custom schemes, if `SUBPAR_CUSTOM_PARALLELIZE_SIMPLE_NOTHROW` is defined, it will be used if `nothrow_ = true`;
  * otherwise, `SUBPAR_CUSTOM_PARALLELIZE_SIMPLE` will continue to be used.
  *
+ * A worker ID of zero may or may not indicate that execution is being performed on the main thread.
+ * This relationship is true for the default `<thread>`-based implementation but may not be for OpenMP.
+ * (Note that the OpenMP thread number is not the same as the worker ID.)
+ * Custom overrides may also use a non-main thread to execute `run_task_range()` with `w = 0`. 
+ *
  * @tparam nothrow_ Whether the `Run_` function cannot throw an exception.
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts `w`, the index of the task (and thus the worker) as a `Task_`.

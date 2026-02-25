@@ -83,6 +83,11 @@ int sanitize_num_workers(const int num_workers, const Task_ num_tasks) {
  * otherwise, `SUBPAR_CUSTOM_PARALLELIZE_RANGE` will continue to be used.
  * Any definition of `SUBPAR_CUSTOM_PARALLELIZE_RANGE_NOTHROW` should follow the same rules described above for `SUBPAR_CUSTOM_PARALLELIZE_RANGE`.
  *
+ * A worker ID of zero may or may not indicate that execution is being performed on the main thread.
+ * This relationship is true for the default `<thread>`-based implementation but may not be for OpenMP. 
+ * (Note that the OpenMP thread number is not the same as the worker ID.)
+ * Custom overrides may also use a non-main thread to execute `run_task_range()` with `w = 0`. 
+ *
  * @tparam nothrow_ Whether the `Run_` function cannot throw an exception.
  * @tparam Task_ Integer type for the number of tasks.
  * @tparam Run_ Function that accepts three arguments:
