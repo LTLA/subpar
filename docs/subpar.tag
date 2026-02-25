@@ -44,7 +44,6 @@
       <anchorfile>namespacesubpar.html</anchorfile>
       <anchor>aa2ea2594f895ea5837bd3df8ad31af14</anchor>
       <arglist>(int num_workers, const Task_ num_tasks, const Run_ run_task_range)</arglist>
-      <docanchor file="namespacesubpar.html" title="exception handling">Disabling</docanchor>
     </member>
   </compound>
   <compound kind="page">
