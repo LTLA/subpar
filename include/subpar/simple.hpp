@@ -45,13 +45,14 @@ namespace subpar {
  *
  * @tparam nothrow_ Whether the `Run_` function cannot throw an exception.
  * @tparam Task_ Integer type for the number of tasks.
- * @tparam Run_ Function that accepts `w`, the index of the task (and thus the worker) as a `Task_`.
+ * @tparam Run_ Function that accepts `w`, the index of the task (and thus the worker ID) as a `Task_`.
  * Any return value is ignored.
  *
  * @param num_tasks Number of tasks.
  * This is also the number of workers as we assume a 1:1 mapping between tasks and workers.
- * @param run_task Function to execute the task for each worker.
- * This will be called exactly once in each worker, where `w` is guaranteed to be in `[0, num_tasks)`.
+ * It should be non-negative.
+ * @param run_task Function to execute each task.
+ * This will be called exactly once in its corresponding worker, where `w` is guaranteed to be in `[0, num_tasks)`.
  * This function may throw an exception if `nothrow_ = false`.
  */
 template<bool nothrow_ = false, typename Task_, class Run_>
