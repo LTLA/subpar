@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['number_20of_20workers_0',['Checking the number of workers',['../index.html#autotoc_md4',1,'']]]
+  ['manual_0',['Manual',['../index.html#autotoc_md8',1,'']]]
 ];

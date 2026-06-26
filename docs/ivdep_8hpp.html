@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.12.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>subpar: subpar Directory Reference</title>
+<title>subpar: subpar/ivdep.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -90,25 +90,42 @@ $(function(){ initResizable(false); });
 </div><!-- top -->
 <div id="doc-content">
 <div class="header">
-  <div class="headertitle"><div class="title">subpar Directory Reference</div></div>
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">ivdep.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Ignore vector dependencies in a loop.  
+<a href="#details">More...</a></p>
+
+<p><a href="ivdep_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
-Files</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="ivdep_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ivdep_8hpp.html">ivdep.hpp</a></td></tr>
-<tr class="memdesc:ivdep_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ignore vector dependencies in a loop. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="range_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="range_8hpp.html">range.hpp</a></td></tr>
-<tr class="memdesc:range_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize across a range of tasks. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="simple_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="simple_8hpp.html">simple.hpp</a></td></tr>
-<tr class="memdesc:simple_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallelize individual tasks across workers. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="subpar_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="subpar_8hpp.html">subpar.hpp</a></td></tr>
-<tr class="memdesc:subpar_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Substitutable parallelization functions. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ae6c0fc4ae789218b2ec1b5ca495eaeea" id="r_ae6c0fc4ae789218b2ec1b5ca495eaeea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6c0fc4ae789218b2ec1b5ca495eaeea">SUBPAR_IVDEP</a></td></tr>
+<tr class="separator:ae6c0fc4ae789218b2ec1b5ca495eaeea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Ignore vector dependencies in a loop. </p>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ae6c0fc4ae789218b2ec1b5ca495eaeea" name="ae6c0fc4ae789218b2ec1b5ca495eaeea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6c0fc4ae789218b2ec1b5ca495eaeea">&#9670;&#160;</a></span>SUBPAR_IVDEP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SUBPAR_IVDEP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Indicate that the following <code>for</code> loop has no vector dependencies.</p>
+<p>This macro should be placed just before or in front of a <code>for</code> statement. It inserts the appropriate pragmas to instruct the compiler to ignore dependencies in the loop body. This creates more opportunities for auto-vectorization of the loop body.</p>
+<p>Macros are currently defined for each of the major compilers (clang, GCC, ICC and MSVC). While OpenMP SIMD is more portable, it forces vectorization regardless of the compiler's cost model. MSVC also enables fast-math with OpenMP SIMD, which is not desirable. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

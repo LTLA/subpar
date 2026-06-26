@@ -1,6 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <tagfile doxygen_version="1.12.0">
   <compound kind="file">
+    <name>ivdep.hpp</name>
+    <path>subpar/</path>
+    <filename>ivdep_8hpp.html</filename>
+    <member kind="define">
+      <type>#define</type>
+      <name>SUBPAR_IVDEP</name>
+      <anchorfile>ivdep_8hpp.html</anchorfile>
+      <anchor>ae6c0fc4ae789218b2ec1b5ca495eaeea</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
+  <compound kind="file">
     <name>range.hpp</name>
     <path>subpar/</path>
     <filename>range_8hpp.html</filename>
